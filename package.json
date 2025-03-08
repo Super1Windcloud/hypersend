@@ -47,6 +47,7 @@
     "ajv": "^8.17.1",
     "antd": "^5.24.1",
     "antd-style": "^3.7.1",
+    "clipboardy": "^4.0.0",
     "dotenv": "^16.4.7",
     "electron-icon-builder": "^2.0.1",
     "electron-updater": "^6.3.9",

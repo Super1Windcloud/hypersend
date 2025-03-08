@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { TextInputModel } from './TextInputModel'
 import { useState } from 'react'
+import { electron } from 'process'
 
 const SelectTitle = styled.h2`
   font-size: 16px;
@@ -63,14 +64,23 @@ const TransferIcons = () =>
        return [...p]
      })
    }
-
+  const invokeClipboard = async () => {
+     await window.electron.ipcRenderer.invoke('sendClipboard')
+  }
+  const openFolder = async () => {
+    await window.electron.ipcRenderer.invoke('openFolder')
+  }
+  const openFileExplorer = async () =>
+  {
+    await window.electron.ipcRenderer.invoke('openFile')
+  }
   return (
     <NavBar>
       <TextInputModel isModalOpen ={ isModalOpen }  toggleModal = { toggleModal } > </TextInputModel>
-      <IconButton icon="📄" text="文件" ClickEvent={() => { toggleModal(0 , true) }} />
-      <IconButton icon="📁" text="文件夹"  ClickEvent = {() => {console.log("文件夹")}} />
+      <IconButton icon="📄" text="文件" ClickEvent={() => { openFileExplorer() }}  />
+      <IconButton icon="📁" text="文件夹"  ClickEvent = {() => { openFolder() }} />
       <IconButton icon="📝" text="文本"  ClickEvent={ ()=> { toggleModal(0, true) }  }  />
-      <IconButton icon="📋" text="剪贴板"  ClickEvent = {() => {console.log("剪贴板")}} />
+      <IconButton icon="📋" text="剪贴板"  ClickEvent = {() => {  invokeClipboard() }} />
 
     </NavBar>
   )

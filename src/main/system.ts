@@ -64,13 +64,8 @@ export async function checkAndKillPort(port) {
 
 export   function captureScreenMonitorToPNG ()
 {
-  //  获取屏幕画面 通过Node
-
-
   let monitor = Monitor.fromPoint(100, 100)
-
   console.log(monitor, monitor?.id)
-
   let image   = monitor?.captureImageSync()
   if (!image)  {  console.error('No image captured');  return }
   fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync())
@@ -91,6 +86,37 @@ export   function captureScreenMonitorToPNG ()
   })
   return  image.toPngSync()
 }
+
+export async function captureScreenWindowToBMP()
+{
+  let monitor = Monitor.fromPoint(100, 100)
+  console.log(monitor, monitor?.id)
+  let image = monitor?.captureImageSync()
+  if (!image) { console.error('No image captured'); return }
+  fs.writeFileSync(`img/${monitor?.id}-sync.bmp`, image.toBmpSync())
+
+  let monitors = Monitor.all()
+
+  monitors.forEach((capturer) =>
+  {
+    console.log({
+      id: capturer.id,
+      x: capturer.x,
+      y: capturer.y,
+      width: capturer.width,
+      height: capturer.height,
+      rotation: capturer.rotation,
+      scaleFactor: capturer.scaleFactor,
+      isPrimary: capturer.isPrimary
+    })
+  })
+  return image?.toBmpSync()
+}
+
+
+
+
+
 
 export   function captureScreenMonitorToJpeg ()
 {
@@ -125,40 +151,6 @@ export   function captureScreenMonitorToJpeg ()
     })
   })
   return  image?.toJpegSync()
-}
-
-
-
-export async function captureScreenWindowToBMP()
-{
-  let monitor = Monitor.fromPoint(100, 100)
-
-  console.log(monitor, monitor?.id)
-
-  let image = monitor?.captureImageSync()
-  monitor?.captureImage().then((data) =>
-  {
-    console.log(data)
-    if (!data) { console.error('No image captured'); return }
-    fs.writeFileSync(`img/${monitor?.id}.bmp`, data.toBmpSync())
-  })
-
-  let monitors = Monitor.all()
-
-  monitors.forEach((capturer) =>
-  {
-    console.log({
-      id: capturer.id,
-      x: capturer.x,
-      y: capturer.y,
-      width: capturer.width,
-      height: capturer.height,
-      rotation: capturer.rotation,
-      scaleFactor: capturer.scaleFactor,
-      isPrimary: capturer.isPrimary
-    })
-  })
-  return image?.toBmpSync ()
 }
 
 

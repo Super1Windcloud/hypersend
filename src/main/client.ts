@@ -1,19 +1,18 @@
 import fastify, { type FastifyRequest, type FastifyInstance, type FastifyServerOptions } from 'fastify'
 import path from 'path'
 import { devLog } from '@/utils'
-import ws , {type WebSocket} from '@fastify/websocket'
+import ws, { type WebSocket } from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
 import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort } from './system'
 import fastifyCors from '@fastify/cors'
 import { getOcrTesseractResult } from './ocr'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import { AliOcrClient } from './request'
-
-
-
-let activeSockets: WebSocket[] = []
+import clipboardy from 'clipboardy';
+import { dialog } from 'electron';
+import { readFile } from 'fs/promises';
 let app: FastifyInstance | null | undefined = null
-let wsClients = new Set(); // 存储 WebSocket 客户端
+let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
 
 async function createFastifyApp()
 {
@@ -85,7 +84,7 @@ async function createFastifyApp()
       reply.status(500).send('ocr ali router Internal Server Error')
     }
   })
-  app.post('/ocr/tesseract',  async (request, reply) =>
+  app.post('/ocr/tesseract', async (request, reply) =>
   {
     try
     {
@@ -102,7 +101,7 @@ async function createFastifyApp()
   {
     try
     {
-      const image = captureScreenWindowToBMP()
+      const image = await captureScreenMonitorToPNG();
       if (!image)
       {
         console.error('No image captured')
@@ -147,10 +146,122 @@ export function stopClientServer()
 
 export function sendMessageToClient(message: string)
 {
-  if (!app) return
-  // 遍历所有活跃的 WebSocket 连接，发送消息
-  activeSockets.forEach((socket) =>
+
+  if (!app || !wsClients.size) return
+  const wsJson  = {
+    type: 'text',
+    data: message
+  }
+  wsClients.forEach((client) =>
   {
-    socket.send(message)
+    client.send(  JSON.stringify(wsJson)  )
   })
+}
+export  async function sendBlobToClient(base64: Base64URLString, filePath?: string)
+{
+  if (!app || !wsClients.size) return;
+  let name = filePath?.match(/[^/\\]+$/)?.[0] ?? 'unknown';
+  devLog(name);
+  const wsJson = {
+    type: 'base64',
+    data: base64,
+   fileName :name
+  }
+  wsClients.forEach((client) =>
+  {
+    client.send( JSON.stringify(wsJson)  )
+  });
+}
+
+export async function sendFileToClient()
+{
+  // 从环境变量中获取用户主目录路径
+  const defaultDir = process.env.USERPROFILE;
+  // 如果没有获取到用户主目录路径，则直接返回
+  if (!defaultDir) return
+  // 使用 try-catch 块来处理可能出现的异常
+  try
+  {
+    // 使用 dialog.showOpenDialog 显示文件选择对话框，并等待用户选择文件
+    let result = await dialog.showOpenDialog({
+      properties: ['openFile'], // 只允许选择文件
+      filters: [
+        { name: '所有文件', extensions: ['*'] }, // 允许所有类型的文件
+      ],
+      defaultPath: defaultDir, // 默认打开用户主目录
+    })
+
+    if (!result.canceled && result.filePaths.length > 0)
+    {
+      const selectedFilePath = result.filePaths[0];
+      console.log('用户选择的文件路径:', selectedFilePath);
+      if (!selectedFilePath) return null;
+      await   sendFileBlobToClient(selectedFilePath);
+    }
+    return null;
+  }
+  catch (err)
+  {
+    console.error('选择文件时出错:', err);
+    return null;
+  }
+}
+
+export function sendFolderToClient()
+{
+  const folderPath = process.env.USERPROFILE;
+  if (!folderPath)
+  {
+    console.error('无法获取用户主目录');
+    return;
+  }
+  dialog
+    .showOpenDialog({
+      properties: ['openDirectory'], // 只允许选择文件夹
+    })
+    .then((result) =>
+    {
+      if (!result.canceled && result.filePaths.length > 0)
+      {
+        const selectedFolderPath = result.filePaths[0];
+        console.log('用户选择的目录路径:', selectedFolderPath);
+
+      }
+    })
+    .catch((err) =>
+    {
+      console.error('选择文件夹时出错:', err);
+    });
+}
+
+
+export function sendClipboardToClient()
+{
+  clipboardy.read().then(text =>
+  {
+    console.log(text);
+    sendMessageToClient(text);
+  }).catch(err =>
+  {
+    console.error(err);
+  });
+
+}
+
+
+export async function sendFileBlobToClient(filePath: string)
+{
+  try
+  {
+    const fileBuffer  :Buffer = await readFile(filePath);
+
+
+     const base64 = fileBuffer.toString('base64');
+     await sendBlobToClient(base64, filePath );
+
+    console.log('文件已成功发送到前端');
+  } catch (error)
+  {
+    console.error('读取文件失败:', error);
+  }
 }
