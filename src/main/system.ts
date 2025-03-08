@@ -73,7 +73,7 @@ export   function captureScreenMonitorToPNG ()
 
   let image   = monitor?.captureImageSync()
   if (!image)  {  console.error('No image captured');  return }
-  fs.writeFileSync(`${monitor?.id}-sync.png`, image.toPngSync())
+  fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync())
 
   let monitors = Monitor.all()
 
@@ -107,7 +107,7 @@ export   function captureScreenMonitorToJpeg ()
   monitor?.captureImage().then((data) => {
     console.log(data)
     if (!data) { console.error('No image captured'); return }
-    fs.writeFileSync(`${monitor?.id}.jpeg`, data.toJpegSync())
+    fs.writeFileSync(`img/${monitor?.id}.jpeg`, data.toJpegSync())
   })
 
   let monitors = Monitor.all()
@@ -143,7 +143,7 @@ export async function captureScreenWindow()
     })
 
     let image = item.captureImageSync()
-    fs.writeFileSync(`${item.id}-sync.bmp`, image.toBmpSync())
+    fs.writeFileSync(`img${item.id}-sync.bmp`, image.toBmpSync())
 
     item.captureImage().then(async (data) => {
       console.log(data)
