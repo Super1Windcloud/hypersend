@@ -5,3 +5,7 @@ out
 .eslintcache
 *.log*
 .env
+
+build
+
+img
