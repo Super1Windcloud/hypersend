@@ -1,5 +1,7 @@
 appId: com.superwindcloud.hypersend
 productName: hypersend
+icon :  build/victory/icons/icon.ico
+
 directories:
   buildResources: build
 files:
@@ -9,10 +11,16 @@ files:
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+ 
+
 asarUnpack:
   - resources/**
+
+asar : true 
+
 win:
   target:  nsis
+  defaultArch: x64
   executableName: hypersend
   icon :  build/victory/icons/icon.ico
   certificateFile: null
@@ -20,6 +28,8 @@ win:
   certificateSubjectName: null
   certificateSha1: null
   signAndEditExecutable: false
+  publisherName :  Superwindcloud
+  legalTrademarks : Superwindcloud
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}

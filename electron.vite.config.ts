@@ -2,6 +2,8 @@ import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 export default defineConfig({
+
+
   main: {
     plugins: [externalizeDepsPlugin()],
     resolve: {
@@ -9,6 +11,9 @@ export default defineConfig({
         '@main': resolve('./src/main'),
         '@': resolve('./src')
       }
+    },
+    build: {
+
     }
   },
   preload: {
@@ -18,6 +23,9 @@ export default defineConfig({
         '@preload': resolve('./src/preload'),
         '@': resolve('./src')
       }
+    },
+    build: {
+
     }
   },
   renderer: {
@@ -28,7 +36,9 @@ export default defineConfig({
       }
     },
     plugins: [react()]
+    , build: {
 
+    }
   }
 
 })

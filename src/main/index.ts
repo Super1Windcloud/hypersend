@@ -2,12 +2,11 @@ import { app, shell, BrowserWindow, Tray, Menu  } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { exist } from '@/utils/index'
-const iconPath= join(__dirname, '../../resources/icon.png')
+const iconPath= join(__dirname, '../../resources/victory.png')
 import { startListeningRenderer } from './IpcMain'
 import { startClientServer } from './client'
 
 
-const  iconpath = join(__dirname, '../../resources/victory.png')
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null
 const preloadPath  =
@@ -60,7 +59,7 @@ function createWindow() {
   // })
 
   // 创建系统托盘图标
-  tray = new Tray(iconpath)
+  tray = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
     {
       label: '打开',

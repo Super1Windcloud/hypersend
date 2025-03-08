@@ -11,6 +11,7 @@ export  async function getOcrTesseractResult(image: string): Promise<string> {
   return ret.data.text
 }
   
+// 
 
 
 
