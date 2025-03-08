@@ -7,7 +7,6 @@
     "src/utils"
   ],
   "exclude": [
-    "node_modules",
     "test_ws"
   ],
   "compilerOptions": {

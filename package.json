@@ -6,6 +6,9 @@
   "author": "superwindcloud",
   "homepage": "https://gitee.com/superwindcloud/hypersend",
   "type": "module",
+  "license": "MIT",
+  "private": true,
+  "packageManager": "pnpm",
   "scripts": {
     "native": "electron . ",
     "format": "prettier --write .",
@@ -21,13 +24,13 @@
     "build": "npm run typecheck && electron-vite build",
     "build:dry": "  electron-vite build",
     "postinstall": "electron-builder install-app-deps",
-    "build:unpack": "npm run build && electron-builder --dir",
+    "build:unpack": "electron-vite build && electron-builder --dir",
     "win_dry": "electron-vite build && electron-builder --win",
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
     "gen-installer-icons": "electron-icon-builder --input=./resources/victory.png --output=build/victory --flatten",
-    "clean"  :"rimraf  node_modules"
+    "clean": "rimraf  node_modules"
   },
   "dependencies": {
     "@alicloud/ocr-api20210707": "^3.1.2",
@@ -62,6 +65,7 @@
     "@types/react-dom": "^18.3.5",
     "@types/ws": "^8.5.14",
     "@vitejs/plugin-react": "^4.3.4",
+    "ajv": "^8.17.1",
     "babel-plugin-styled-components": "^2.1.4",
     "electron": "^34.2.0",
     "electron-builder": "^25.1.8",

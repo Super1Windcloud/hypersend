@@ -129,28 +129,36 @@ export   function captureScreenMonitorToJpeg ()
 
 
 
-export async function captureScreenWindow()
+export async function captureScreenWindowToBMP()
 {
-  let windows = Window.all()
+  let monitor = Monitor.fromPoint(100, 100)
 
-  windows.forEach((item) => {
+  console.log(monitor, monitor?.id)
+
+  let image = monitor?.captureImageSync()
+  monitor?.captureImage().then((data) =>
+  {
+    console.log(data)
+    if (!data) { console.error('No image captured'); return }
+    fs.writeFileSync(`img/${monitor?.id}.bmp`, data.toBmpSync())
+  })
+
+  let monitors = Monitor.all()
+
+  monitors.forEach((capturer) =>
+  {
     console.log({
-      id: item.id,
-      x: item.x,
-      y: item.y,
-      width: item.width,
-      height: item.height,
-    })
-
-    let image = item.captureImageSync()
-    fs.writeFileSync(`img${item.id}-sync.bmp`, image.toBmpSync())
-
-    item.captureImage().then(async (data) => {
-      console.log(data)
-      let newImage = await data.crop(10, 10, 10, 10)
-      fs.writeFileSync(`${item.id}.png`, await newImage.toPng())
+      id: capturer.id,
+      x: capturer.x,
+      y: capturer.y,
+      width: capturer.width,
+      height: capturer.height,
+      rotation: capturer.rotation,
+      scaleFactor: capturer.scaleFactor,
+      isPrimary: capturer.isPrimary
     })
   })
+  return image?.toBmpSync ()
 }
 
 

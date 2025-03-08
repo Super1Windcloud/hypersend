@@ -3,7 +3,7 @@ import path from 'path'
 import { devLog } from '@/utils'
 import ws , {type WebSocket} from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
-import { captureScreenMonitorToPNG, checkAndKillPort } from './system'
+import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort } from './system'
 import fastifyCors from '@fastify/cors'
 import { getOcrTesseractResult } from './ocr'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
@@ -102,7 +102,7 @@ async function createFastifyApp()
   {
     try
     {
-      const image = captureScreenMonitorToPNG()
+      const image = captureScreenWindowToBMP()
       if (!image)
       {
         console.error('No image captured')
