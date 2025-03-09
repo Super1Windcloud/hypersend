@@ -7,20 +7,19 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export class AliOcrClient { 
-    
+export class AliOcrClient {
+
 
   static  createClient(): ocr_api20210707
-  { 
+  {
        let id = process.env['ALIBABA_CLOUD_ACCESS_KEY_ID']
       let secret = process.env['ALIBABA_CLOUD_ACCESS_KEY_SECRET']
 
     let config = new $OpenApi.Config({
-      accessKeyId:  id   , 
-      accessKeySecret:  secret   , 
+      accessKeyId:  id   ,
+      accessKeySecret:  secret   ,
       endpoint: `ocr-api.cn-hangzhou.aliyuncs.com`
     })
-    // config.endpoint = `ocr-api.cn-hangzhou.aliyuncs.com`
     return new ocr_api20210707(config)
   }
 
@@ -29,7 +28,7 @@ export class AliOcrClient {
     let recognizeDocumentStructureRequest = new $ocr_api20210707.RecognizeDocumentStructureRequest({
       noStamp: false,
       url,
-      blob , 
+      blob ,
       paragraph: true,
       useNewStyleOutput: true,
       page: false

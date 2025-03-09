@@ -5,7 +5,7 @@ import ws, { type WebSocket } from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
 import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort } from './system'
 import fastifyCors from '@fastify/cors'
-import { getOcrTesseractResult } from './ocr'
+import { base64ToBuffer, blobUrlToBuffer, getOcrEsearchResult, getOcrTesseractResult, getPaddleOcrResult } from './ocr';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import { AliOcrClient } from './request'
 import clipboardy from 'clipboardy';
@@ -84,6 +84,7 @@ async function createFastifyApp()
       reply.status(500).send('ocr ali router Internal Server Error')
     }
   })
+
   app.post('/ocr/tesseract', async (request, reply) =>
   {
     try
@@ -94,9 +95,39 @@ async function createFastifyApp()
     } catch (err)
     {
       console.log(err)
-      reply.status(500).send('ocr router Internal Server Error')
+      reply.status(500).send('ocr  tesseract router Internal Server Error')
     }
   })
+
+  app.post('/ocr/esearch', async (request, reply) =>
+  {
+    try
+    {
+      let { url } = request.body as { url: string }
+      let ocrStr = await getOcrEsearchResult(url);
+      await reply.send(ocrStr)
+    } catch (err)
+    {
+      console.log(err)
+      reply.status(500).send('ocr  esearchOcr   router Internal Server Error')
+    }
+  })
+  app.post('/ocr/paddleOcr', async (request, reply) =>
+  {
+    try
+    {
+      let { url } = request.body as { url: string }
+      // let buffer  :Buffer  =   base64ToBuffer(url);
+      let buffer  :Buffer  =   await blobUrlToBuffer(url);
+      let ocrStr = await getPaddleOcrResult(buffer );
+      await reply.send(ocrStr)
+    } catch (err)
+    {
+      console.log(err)
+      reply.status(500).send('ocr  paddleOcr router Internal Server Error')
+    }
+  })
+
   app.get('/capture', async (request, reply) =>
   {
     try
