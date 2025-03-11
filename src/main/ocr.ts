@@ -26,18 +26,16 @@ async function blobUrlToCanvas(blobUrl: string): Promise<HTMLCanvasElement | voi
 {
 
 }
-// 定义一个异步函数，用于根据图像源获取图像的Buffer数据
 async function imagePathToloadImgType(imageSource: string): Promise<loadImgType>
 {
   try
   {
-    let buffer: Buffer; // 定义一个Buffer变量用于存储图像数据
-    // 检查图像源是否以'data:'开头，即是否为Base64编码的图像数据
+    let buffer: Buffer;
     if (imageSource.startsWith('data:'))
     {
       // 处理 Base64 数据
-      const base64Data = imageSource.split(',')[1]; // 获取Base64编码的图像数据部分
-      buffer = Buffer.from(base64Data, 'base64'); // 将Base64数据转换为Buffer
+      const base64Data = imageSource.split(',')[1];
+      buffer = Buffer.from(base64Data, 'base64');
     } else if (imageSource.startsWith('blob:'))
     {
       // 处理 blobUrl
@@ -55,31 +53,6 @@ async function imagePathToloadImgType(imageSource: string): Promise<loadImgType>
     throw new Error(`Failed to convert image source to canvas: ${error.message}`);
   }
 }
-
-/**
- * type resultType = {
-    text: string;
-    mean: number;
-    box: BoxType; // ↖ ↗ ↘ ↙
-    style: { bg: color; text: color }; // rgb数组，表示背景颜色和文字颜色，在简单移除文字时非常有用
-}[];
-
-{
-    src: resultType; // 每个视觉行，rec输出
-    columns: {
-        // 分栏，如左右分栏
-        src: resultType;
-        outerBox: BoxType;
-        parragraphs: {
-            src: resultType;
-            parse: resultType[0];
-        }
-        [];
-    }
-    [];
-    parragraphs: resultType; // 聚合了columns的每个段落
-}
- */
 
 export async function getOcrEsearchResult(imgCanvas  : loadImgType) : Promise<string | void>
 {

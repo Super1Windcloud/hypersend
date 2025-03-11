@@ -53,7 +53,19 @@ async function createFastifyApp()
     })
 
   })
-
+  app.post('/answer', async (request, reply) =>
+  {
+    try
+    {
+      const { question } = request.query as { question: string }
+      const answer = "" ;
+      reply.send({ answer })
+    } catch (err)
+    {
+      console.log(err)
+      reply.status(500).send('Internal Server Error')
+    }
+  })
   app.get('/', async (request, reply) =>
   {
     try

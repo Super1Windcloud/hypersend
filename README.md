@@ -7,3 +7,7 @@
 ##  快速开始
 
 >  `pnpm i && pnpm dev `
+
+
+##  构建安装包
+>  `pnpm  win_dry`

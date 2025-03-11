@@ -1,6 +1,5 @@
 import OpenAI from 'openai'
 import env from 'dotenv'
-import process from 'process'
 env.config()
 const xunfei = new OpenAI({
   baseURL: 'https://spark-api-open.xf-yun.com/v1',
