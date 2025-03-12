@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
 import { RequestOptions } from 'openai/core'
+import { devLog } from '.'
 // 该接口为部署在vercel的 逆向API服务
 const deepseek = new OpenAI({
   baseURL: 'https://deepseek-free-api-master-dusky.vercel.app/v1',
@@ -36,7 +37,7 @@ export async function deepSeekServices() {
     requestOptions
   )
   let result = completion.choices[0].message.content
-  console.log(result)
+  devLog(result)
   return result
 }
 export async function KimiServices() {
@@ -56,7 +57,7 @@ export async function KimiServices() {
     },
     requestOptions
   )
-  console.log(completion.choices[0].message.content)
+  devLog (completion.choices[0].message.content)
   return completion.choices[0].message.contents
 }
 

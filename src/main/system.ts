@@ -65,7 +65,7 @@ export async function checkAndKillPort(port) {
 export   function captureScreenMonitorToPNG ()
 {
   let monitor = Monitor.fromPoint(100, 100)
-  console.log(monitor, monitor?.id)
+  devLog(monitor, monitor?.id)
   let image   = monitor?.captureImageSync()
   if (!image)  {  console.error('No image captured');  return }
   fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync())
@@ -73,7 +73,7 @@ export   function captureScreenMonitorToPNG ()
   let monitors = Monitor.all()
 
   monitors.forEach((capturer) => {
-    console.log({
+    devLog({
       id: capturer.id,
       x: capturer.x,
       y: capturer.y,
@@ -90,7 +90,7 @@ export   function captureScreenMonitorToPNG ()
 export async function captureScreenWindowToBMP()
 {
   let monitor = Monitor.fromPoint(100, 100)
-  console.log(monitor, monitor?.id)
+ devLog(monitor, monitor?.id)
   let image = monitor?.captureImageSync()
   if (!image) { console.error('No image captured'); return }
   fs.writeFileSync(`img/${monitor?.id}-sync.bmp`, image.toBmpSync())
@@ -99,7 +99,7 @@ export async function captureScreenWindowToBMP()
 
   monitors.forEach((capturer) =>
   {
-    console.log({
+  devLog({
       id: capturer.id,
       x: capturer.x,
       y: capturer.y,
@@ -125,13 +125,13 @@ export   function captureScreenMonitorToJpeg ()
 
   let monitor = Monitor.fromPoint(100, 100)
 
-  console.log(monitor, monitor?.id)
+  devLog(monitor, monitor?.id)
 
   let image = monitor?.captureImageSync()
 
 
   monitor?.captureImage().then((data) => {
-    console.log(data)
+   devLog(data)
     if (!data) { console.error('No image captured'); return }
     fs.writeFileSync(`img/${monitor?.id}.jpeg`, data.toJpegSync())
   })
@@ -139,7 +139,7 @@ export   function captureScreenMonitorToJpeg ()
   let monitors = Monitor.all()
 
   monitors.forEach((capturer) => {
-    console.log({
+    devLog({
       id: capturer.id,
       x: capturer.x,
       y: capturer.y,

@@ -6,6 +6,7 @@ import * as ort from "onnxruntime-node";
 import { createCanvas, loadImage, createImageData, ImageData as CanvasImageData } from "canvas"
 // @ts-ignore
 import Ocr from '@gutenye/ocr-node'
+import { devLog } from '@/utils';
 
 type loadImgType = string | CanvasImageData | Buffer ;
 
@@ -15,7 +16,7 @@ export  async function getOcrTesseractResult(image: string): Promise<string> {
     logger: (m) => console.log(m) // Add logger here
   })
   const ret = await worker.recognize(image)
-  console.log(ret.data.text)
+  devLog(ret.data.text)
   await worker.terminate()
 
   return ret.data.text
@@ -133,7 +134,7 @@ export async function getPaddleOcrResult(img ? : loadImgType): Promise<string | 
   const result : PaddleOcrResultType[]  = await ocr.detect(img)
 
   let text = result.map(({ text }: PaddleOcrResultType) => text).join("\n")
-  console.log(text);
+  devLog(text);
   return text;
 }
 export  async function blobUrlToBuffer(blobUrl: string): Promise<Buffer>

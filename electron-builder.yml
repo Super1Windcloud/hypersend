@@ -11,12 +11,12 @@ files:
   - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
- 
+
 
 asarUnpack:
   - resources/**
 
-asar : true 
+asar : true
 
 win:
   target:  nsis
@@ -35,7 +35,7 @@ nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
+  createDesktopShortcut:  false
   createStartMenuShortcut: true
   installerIcon: build/victory/icons/icon.ico
   uninstallerIcon: build/victory/icons/icon.ico

@@ -11,3 +11,6 @@
 
 ##  构建安装包
 >  `pnpm  win_dry`
+
+
+![alt text](image.png)

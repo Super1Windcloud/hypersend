@@ -11,6 +11,7 @@ import { AliOcrClient } from './request'
 import clipboardy from 'clipboardy';
 import { dialog } from 'electron';
 import { readFile } from 'fs/promises';
+import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/utils/api'
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
 
@@ -53,19 +54,80 @@ async function createFastifyApp()
     })
 
   })
-  app.post('/answer', async (request, reply) =>
+  app.post('/llm/qwen', async (request, reply) =>
   {
+    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
+    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
+    reply.raw.flushHeaders(); // 立即发送响应头
+    const { question } = request.body  as { question: string }
+
     try
     {
-      const { question } = request.query as { question: string }
-      const answer = "" ;
-      reply.send({ answer })
-    } catch (err)
+      let result = await FreeQwenServices(question, (chunk: string) =>
+      {
+        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
+         process.stdout.write(chunk);
+      })
+
+      reply.raw.end();
+    } catch (error)
     {
-      console.log(err)
+      console.error('Error:', error);
+      reply.raw.write('Error: Something went wrong\n');
+      reply.raw.end();
       reply.status(500).send('Internal Server Error')
     }
   })
+  app.post('/llm/random', async (request, reply) =>
+  {
+    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
+    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
+    reply.raw.flushHeaders(); // 立即发送响应头
+    const { question } = request.body as { question: string }
+
+    try
+    {
+      let result = await RandomLLMServices(question, (chunk: string) =>
+      {
+        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
+        process.stdout.write(chunk);
+      })
+
+      reply.raw.end();
+    } catch (error)
+    {
+      console.error('Error:', error);
+      reply.raw.write('Error: Something went wrong\n');
+      reply.raw.end();
+      reply.status(500).send('Internal Server Error')
+    }
+  })
+
+  app.post('/llm/codegeex', async (request, reply) =>
+  {
+    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
+    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
+    reply.raw.flushHeaders(); // 立即发送响应头
+    const { question } = request.body as { question: string }
+
+    try
+    {
+      let result = await ZhiPuServices(question, (chunk: string) =>
+      {
+        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
+        process.stdout.write(chunk);
+      })
+      //  console.log(result);
+      reply.raw.end();
+    } catch (error)
+    {
+      console.error('Error:', error);
+      reply.raw.write('Error: Something went wrong\n');
+      reply.raw.end();
+      reply.status(500).send('Internal Server Error')
+    }
+  })
+
   app.get('/', async (request, reply) =>
   {
     try
@@ -92,7 +154,7 @@ async function createFastifyApp()
       await reply.send(ocrStr)
     } catch (err)
     {
-      console.log(err)
+      console.error(err)
       reply.status(500).send('ocr ali router Internal Server Error')
     }
   })
@@ -106,7 +168,7 @@ async function createFastifyApp()
       await reply.send(ocrStr)
     } catch (err)
     {
-      console.log(err)
+      console.error(err)
       reply.status(500).send('ocr  tesseract router Internal Server Error')
     }
   })
@@ -120,7 +182,7 @@ async function createFastifyApp()
       await reply.send(ocrStr)
     } catch (err)
     {
-      console.log(err)
+      console.error(err)
       reply.status(500).send('ocr  esearchOcr   router Internal Server Error')
     }
   })
@@ -135,7 +197,7 @@ async function createFastifyApp()
       await reply.send(ocrStr)
     } catch (err)
     {
-      console.log(err)
+      console.error(err)
       reply.status(500).send('ocr  paddleOcr router Internal Server Error')
     }
   })
@@ -153,7 +215,7 @@ async function createFastifyApp()
       await reply.send(image)
     } catch (err)
     {
-      console.log(err)
+      console.error (err)
       reply.status(500).send('Internal Server Error')
     }
   })
@@ -163,6 +225,7 @@ async function createFastifyApp()
 
 export async function startClientServer()
 {
+  envPrint()
   app = app ?? (await createFastifyApp())
   await checkAndKillPort(33333)
   // 启动服务器并监听 33333 端口
@@ -173,7 +236,7 @@ export async function startClientServer()
       console.error('FUCK', err)
       process.exit(1)
     }
-    console.log(`Client server is running on ${address}  :33333`)
+    devLog(`Client server is running on ${address}  :33333`)
   })
 }
 
@@ -237,7 +300,7 @@ export async function sendFileToClient()
     if (!result.canceled && result.filePaths.length > 0)
     {
       const selectedFilePath = result.filePaths[0];
-      console.log('用户选择的文件路径:', selectedFilePath);
+  devLog('用户选择的文件路径:', selectedFilePath);
       if (!selectedFilePath) return null;
       await   sendFileBlobToClient(selectedFilePath);
     }
@@ -267,7 +330,7 @@ export function sendFolderToClient()
       if (!result.canceled && result.filePaths.length > 0)
       {
         const selectedFolderPath = result.filePaths[0];
-        console.log('用户选择的目录路径:', selectedFolderPath);
+         devLog('用户选择的目录路径:', selectedFolderPath);
 
       }
     })
@@ -282,7 +345,7 @@ export function sendClipboardToClient()
 {
   clipboardy.read().then(text =>
   {
-    console.log(text);
+   devLog(text);
     sendMessageToClient(text);
   }).catch(err =>
   {
@@ -302,7 +365,7 @@ export async function sendFileBlobToClient(filePath: string)
      const base64 = fileBuffer.toString('base64');
      await sendBlobToClient(base64, filePath );
 
-    console.log('文件已成功发送到前端');
+    devLog('文件已成功发送到前端');
   } catch (error)
   {
     console.error('读取文件失败:', error);
