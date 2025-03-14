@@ -208,7 +208,7 @@ async function createFastifyApp()
     } catch (err)
     {
       console.error(err)
-      reply.status(500).send('ocr  paddleOcr router Internal Server Error')
+      reply.status(500).send('ocr  paddleOcr router Internal Server Error \n'+err)
     }
   })
 

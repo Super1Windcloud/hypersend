@@ -1,5 +1,5 @@
 import { createWorker } from 'tesseract.js'
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import path, { join } from 'path';
 import * as ocr from "esearch-ocr";
 import * as ort from "onnxruntime-node";
@@ -127,21 +127,31 @@ export async function getPaddleOcrResult(img ? : loadImgType): Promise<string | 
       det = process.cwd() + "\\esearch\\ppocr_det.onnx";
       rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
       key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
-  } else if (process.env.NODE_ENV === 'production')
+  } else
   {
-    const appPath = app.getAppPath();
-      det = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_det.onnx');
-      rec = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_rec.onnx');
-      key = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt');
+    det = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_det.onnx');
+    rec = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_rec.onnx');
+    key = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt');
   }
+  let ocr;
+  writeFileSync('log.txt', det+'\n'+rec+'\n'+key+'\n');
+  try
+  {
+    ocr = await Ocr.create({
+      models : {
+        defaultDetectionPath: det,
+        defaultRecognitionPath: rec,
+        dictionaryPath: key,
+      } ,
+      isDebug: false,
+      debugOutputDir: './outputLog',
 
-  const ocr = await Ocr.create({
-    isDebug: false ,
-    debugOutputDir: './outputLog',
-    defaultDetectionPath: det,
-    defaultRecognitionPath: rec,
-    dictionaryPath: key,
-  })
+    })
+  } catch (error)
+  {
+    console.error('Error in getPaddleOcrResult:', error);
+    throw error+'\n 模型路径'+det ; // 重新抛出错误，以便调用者处理
+  }
   const result : PaddleOcrResultType[]  = await ocr.detect(img)
 
   let text = result.map(({ text }: PaddleOcrResultType) => text).join("\n")

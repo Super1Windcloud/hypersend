@@ -1,8 +1,8 @@
-import { app as app$1, dialog, ipcMain, BrowserWindow, shell, Tray, Menu } from "electron";
+import { dialog, app as app$1, ipcMain, BrowserWindow, shell, Tray, Menu } from "electron";
 import path, { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import os from "os";
-import fs, { readFileSync } from "fs";
+import fs, { readFileSync, writeFileSync } from "fs";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { Monitor } from "node-screenshots";
@@ -207,19 +207,27 @@ async function getPaddleOcrResult(img) {
     det = process.cwd() + "\\esearch\\ppocr_det.onnx";
     rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
     key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
-  } else if (process.env.NODE_ENV === "production") {
-    const appPath = app$1.getAppPath();
-    det = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_det.onnx");
-    rec = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_rec.onnx");
-    key = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_keys_v1.txt");
+  } else {
+    det = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_det.onnx");
+    rec = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_rec.onnx");
+    key = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_keys_v1.txt");
   }
-  const ocr2 = await Ocr.create({
-    isDebug: false,
-    debugOutputDir: "./outputLog",
-    defaultDetectionPath: det,
-    defaultRecognitionPath: rec,
-    dictionaryPath: key
-  });
+  let ocr2;
+  writeFileSync("log.txt", det + "\n" + rec + "\n" + key + "\n");
+  try {
+    ocr2 = await Ocr.create({
+      models: {
+        defaultDetectionPath: det,
+        defaultRecognitionPath: rec,
+        dictionaryPath: key
+      },
+      isDebug: false,
+      debugOutputDir: "./outputLog"
+    });
+  } catch (error) {
+    console.error("Error in getPaddleOcrResult:", error);
+    throw error + "\n 模型路径" + det;
+  }
   const result = await ocr2.detect(img);
   let text = result.map(({ text: text2 }) => text2).join("\n");
   devLog(text);
@@ -855,7 +863,7 @@ async function createFastifyApp() {
       await reply.send(ocrStr);
     } catch (err) {
       console.error(err);
-      reply.status(500).send("ocr  paddleOcr router Internal Server Error");
+      reply.status(500).send("ocr  paddleOcr router Internal Server Error \n" + err);
     }
   });
   app.get("/capture", async (request, reply) => {
