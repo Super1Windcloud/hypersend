@@ -2,7 +2,7 @@ import { dialog, ipcMain, app as app$1, BrowserWindow, shell, Tray, Menu } from 
 import path, { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import os from "os";
-import fs, { readFileSync } from "fs";
+import fs, { readFileSync, createWriteStream } from "fs";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { Monitor } from "node-screenshots";
@@ -729,6 +729,8 @@ async function RandomLLMServices(question, onData, llms = [
 let app = null;
 let wsClients = /* @__PURE__ */ new Set();
 function initEnv() {
+  const writeStream = createWriteStream("./log.txt");
+  writeStream.end();
   if (process.env.NODE_ENV === "development") {
     dotenv.config();
   } else {
@@ -739,12 +741,19 @@ function initEnv() {
 }
 async function createFastifyApp() {
   initEnv();
+  let rootPath;
+  if (process.env.NODE_ENV === "development") {
+    rootPath = path.join(process.cwd(), "public/dist-vite");
+    writeLog("\nrootPath:" + rootPath);
+  } else {
+    rootPath = path.join(process.cwd(), "resources", "app.asar.unpacked", "public/dist-vite");
+    writeLog("\nrootPath:" + rootPath);
+  }
   app = fastify({ logger: true }).withTypeProvider();
   app.register(fastifyStatic, {
-    root: path.join(process.cwd(), "public/dist-vite"),
+    root: rootPath,
     prefix: "/"
   });
-  writeLog("\nfastifyStatic root:" + path.join(process.cwd(), "public/dist-vite"));
   app.register(require2("@fastify/websocket"), {
     options: { maxPayload: 1048576 }
   });
@@ -1042,7 +1051,7 @@ function startListeningRenderer() {
   );
 }
 const iconPath = join(__dirname, "../../resources/sky3.jpg");
-const ico = join(__dirname, "../../build/sky3.ico");
+const ico = join(__dirname, "../../resources/sky3.ico");
 let mainWindow = null;
 let tray = null;
 const preloadPath = exist(join(__dirname, "../preload/index.cjs")) ?? exist(join(__dirname, "../preload/index.mjs")) ?? exist(join(__dirname, "../preload/index.js"));

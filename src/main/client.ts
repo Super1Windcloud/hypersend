@@ -16,33 +16,43 @@ import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
 import dotenv from 'dotenv'
+import { createWriteStream } from 'fs'
 
 
 function initEnv()
 {
-
+  const writeStream = createWriteStream('./log.txt');
+  writeStream.end();
   if (process.env.NODE_ENV === 'development')
   {
     dotenv.config()
   }
   else
   {
-    //  process.cwd(),
     let envPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public', '.env');
     dotenv.config({ path: envPath });
-    writeLog('envPath:' + envPath+'\n');
+    writeLog('envPath:' + envPath + '\n');
   }
 }
 
 async function createFastifyApp()
 {
   initEnv();
+  let rootPath;
+  if (process.env.NODE_ENV === 'development')
+  {
+    rootPath =  path.join(process.cwd(), 'public/dist-vite');
+    writeLog('\n' + 'rootPath:' + rootPath);
+  } else
+  {
+    rootPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public/dist-vite')
+    writeLog('\n' + 'rootPath:' + rootPath);
+  };
   app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
-    root: path.join(process.cwd(), 'public/dist-vite'),
+    root: rootPath,
     prefix: '/'
   })
-  writeLog('\nfastifyStatic root:' + path.join(process.cwd(), 'public/dist-vite'));
   app.register(require('@fastify/websocket'), {
     options: { maxPayload: 1048576 }
   })
@@ -102,7 +112,7 @@ async function createFastifyApp()
     const { question } = request.body as { question: string }
     writeLog('question: ' + question)
     try
-{
+    {
       writeLog("请求LLM接口");
       let result = await FreeQwenServices(question, (chunk: string) =>
       {

@@ -3,9 +3,9 @@ import { join } from 'path'
 import {  optimizer, is, electronApp } from '@electron-toolkit/utils'
 import { exist } from '@/utils/index'
 const iconPath = join(__dirname, '../../resources/sky3.jpg')
-const ico = join(__dirname, '../../build/sky3.ico')
+const ico = join(__dirname, '../../resources/sky3.ico')
 import { startListeningRenderer } from './IpcMain'
-import { startClientServer } from './client'
+
 
 let mainWindow: BrowserWindow | null = null
 let tray: Tray | null = null

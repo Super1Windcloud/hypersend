@@ -1,29 +1,21 @@
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
 模型路径
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
 question: 请使用python 编程语言
-contriputeastneyseetit.inis
-projectismore
-likeanopenwikithanastandard
-guardedopensourceproject.
-Seeour
-informalcontributingguidefor
-more
-detailsoncontributingtothis
-project.请求LLM接口请求LLM接口失败 :Error: The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).模型路径
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
-A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
-question: 请使用python 编程语言
-projectismore
-Likeanopenwikithanastandard
-guardedopensourceproject.
-Seeour
-informalcontributingguidefor
-more
-detailsoncontributingtothis
-project.请求LLM接口It seems like you've provided a snippet of text, possibly from a README file or a contribution guide for a project. However, you haven't specified what kind of algorithm or problem you need help with. Could you please provide more details about the algorithm or problem you're trying to solve? This will help me assist you more effectively.
+##What?
+FastifyisanoPENOpenSourcWelcome
+eProject ud
+What?
+Individualsmakingsignificantandvaluable
+contributionsaregiven
+commit-accesstotheprojecttocontributeastheysee
+fit.Thisprojectismore
+likeanopenwikithanastandardguardedopensource
+project.
+Seeourinformalcontributingguideformore
+detailsoncontributingtothisproject.
+>Iwanttobeacollaborator!
+Ifyouthinkyoumeettheabovecriteriaandwehave
+notinvitedyouyet,weare
+Lead请求LLM接口

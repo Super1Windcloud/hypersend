@@ -29,6 +29,7 @@
     "build:dry": "  electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "unpack": "electron-vite build && electron-builder --dir --config ",
+    "unpack:dry" :"electron-builder --dir --config " ,
     "win_dry": "electron-vite build && electron-builder --win --config",
     "win-portable": "electron-vite  build  && electron-builder --win portable",
     "build:win": "npm run build && electron-builder --win --config ",
