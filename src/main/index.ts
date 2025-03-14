@@ -1,6 +1,6 @@
 import { app, shell, BrowserWindow, Tray, Menu } from 'electron'
 import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import {  optimizer, is, electronApp } from '@electron-toolkit/utils'
 import { exist } from '@/utils/index'
 const iconPath = join(__dirname, '../../resources/sky3.jpg')
 const ico = join(__dirname, '../../build/sky3.ico')

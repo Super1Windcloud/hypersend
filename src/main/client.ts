@@ -1,6 +1,6 @@
 import fastify, { type FastifyRequest, type FastifyInstance, type FastifyServerOptions } from 'fastify'
 import path from 'path'
-import { devLog } from '@/utils'
+import { devLog, writeLog } from '@/utils'
 import ws, { type WebSocket } from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
 import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort } from './system'
@@ -11,18 +11,38 @@ import { AliOcrClient } from './request'
 import clipboardy from 'clipboardy';
 import { dialog } from 'electron';
 import { readFile } from 'fs/promises';
-import { app as electronApp } from 'electron';
+
 import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/utils/api'
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
+import dotenv from 'dotenv'
+
+
+function initEnv()
+{
+
+  if (process.env.NODE_ENV === 'development')
+  {
+    dotenv.config()
+  }
+  else
+  {
+    //  process.cwd(),
+    let envPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public', '.env');
+    dotenv.config({ path: envPath });
+    writeLog('envPath:' + envPath+'\n');
+  }
+}
+
 async function createFastifyApp()
 {
+  initEnv();
   app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
-    root: path.join(electronApp.getAppPath(), 'public/dist-vite'),
+    root: path.join(process.cwd(), 'public/dist-vite'),
     prefix: '/'
   })
-
+  writeLog('\nfastifyStatic root:' + path.join(process.cwd(), 'public/dist-vite'));
   app.register(require('@fastify/websocket'), {
     options: { maxPayload: 1048576 }
   })
@@ -73,28 +93,30 @@ async function createFastifyApp()
     })
 
   })
+  //!!
   app.post('/llm/qwen', async (request, reply) =>
   {
     reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
     reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
     reply.raw.flushHeaders(); // 立即发送响应头
-    const { question } = request.body  as { question: string }
-
+    const { question } = request.body as { question: string }
+    writeLog('question: ' + question)
     try
-    {
+{
+      writeLog("请求LLM接口");
       let result = await FreeQwenServices(question, (chunk: string) =>
       {
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
-         process.stdout.write(chunk);
+        process.stdout.write(chunk);
       })
-
       reply.raw.end();
     } catch (error)
     {
       console.error('Error:', error);
       reply.raw.write('Error: Something went wrong\n');
       reply.raw.end();
-      reply.status(500).send('Internal Server Error')
+      writeLog("请求LLM接口失败 :" + error)
+      reply.status(500).send('Internal Server Error\n' + error)
     }
   })
   app.post('/llm/random', async (request, reply) =>
@@ -103,7 +125,7 @@ async function createFastifyApp()
     reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
     reply.raw.flushHeaders(); // 立即发送响应头
     const { question } = request.body as { question: string }
-
+    writeLog('question: ' + question)
     try
     {
       let result = await RandomLLMServices(question, (chunk: string) =>
@@ -128,7 +150,7 @@ async function createFastifyApp()
     reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
     reply.raw.flushHeaders(); // 立即发送响应头
     const { question } = request.body as { question: string }
-
+    writeLog('question: ' + question)
     try
     {
       let result = await ZhiPuServices(question, (chunk: string) =>
@@ -202,13 +224,13 @@ async function createFastifyApp()
     {
       let { url } = request.body as { url: string }
       // let buffer  :Buffer  =   base64ToBuffer(url);
-      let buffer  :Buffer  =   await blobUrlToBuffer(url);
-      let ocrStr = await getPaddleOcrResult(buffer );
+      let buffer: Buffer = await blobUrlToBuffer(url);
+      let ocrStr = await getPaddleOcrResult(buffer);
       await reply.send(ocrStr)
     } catch (err)
     {
       console.error(err)
-      reply.status(500).send('ocr  paddleOcr router Internal Server Error \n'+err)
+      reply.status(500).send('ocr  paddleOcr router Internal Server Error \n' + err)
     }
   })
 
@@ -225,8 +247,8 @@ async function createFastifyApp()
       await reply.send(image)
     } catch (err)
     {
-      console.error (err)
-      reply.status(500).send('request capture router Internal Server Error\n'+err)
+      console.error(err)
+      reply.status(500).send('request capture router Internal Server Error\n' + err)
     }
   })
 
@@ -264,16 +286,16 @@ export function sendMessageToClient(message: string)
 {
 
   if (!app || !wsClients.size) return
-  const wsJson  = {
+  const wsJson = {
     type: 'text',
     data: message
   }
   wsClients.forEach((client) =>
   {
-    client.send(  JSON.stringify(wsJson)  )
+    client.send(JSON.stringify(wsJson))
   })
 }
-export  async function sendBlobToClient(base64: Base64URLString, filePath?: string)
+export async function sendBlobToClient(base64: Base64URLString, filePath?: string)
 {
   if (!app || !wsClients.size) return;
   let name = filePath?.match(/[^/\\]+$/)?.[0] ?? 'unknown';
@@ -281,11 +303,11 @@ export  async function sendBlobToClient(base64: Base64URLString, filePath?: stri
   const wsJson = {
     type: 'base64',
     data: base64,
-   fileName :name
+    fileName: name
   }
   wsClients.forEach((client) =>
   {
-    client.send( JSON.stringify(wsJson)  )
+    client.send(JSON.stringify(wsJson))
   });
 }
 
@@ -310,9 +332,9 @@ export async function sendFileToClient()
     if (!result.canceled && result.filePaths.length > 0)
     {
       const selectedFilePath = result.filePaths[0];
-  devLog('用户选择的文件路径:', selectedFilePath);
+      devLog('用户选择的文件路径:', selectedFilePath);
       if (!selectedFilePath) return null;
-      await   sendFileBlobToClient(selectedFilePath);
+      await sendFileBlobToClient(selectedFilePath);
     }
     return null;
   }
@@ -340,7 +362,7 @@ export function sendFolderToClient()
       if (!result.canceled && result.filePaths.length > 0)
       {
         const selectedFolderPath = result.filePaths[0];
-         devLog('用户选择的目录路径:', selectedFolderPath);
+        devLog('用户选择的目录路径:', selectedFolderPath);
 
       }
     })
@@ -355,7 +377,7 @@ export function sendClipboardToClient()
 {
   clipboardy.read().then(text =>
   {
-   devLog(text);
+    devLog(text);
     sendMessageToClient(text);
   }).catch(err =>
   {
@@ -369,11 +391,11 @@ export async function sendFileBlobToClient(filePath: string)
 {
   try
   {
-    const fileBuffer  :Buffer = await readFile(filePath);
+    const fileBuffer: Buffer = await readFile(filePath);
 
 
-     const base64 = fileBuffer.toString('base64');
-     await sendBlobToClient(base64, filePath );
+    const base64 = fileBuffer.toString('base64');
+    await sendBlobToClient(base64, filePath);
 
     devLog('文件已成功发送到前端');
   } catch (error)

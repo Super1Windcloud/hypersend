@@ -303,6 +303,7 @@ export async function ZhiPuServices(question?: string, onData?: (chunk: string) 
   } catch (error)
   {
     console.error('Error fetching completion:', error)
+    return error;
   }
 }
 

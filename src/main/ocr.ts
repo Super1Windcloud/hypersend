@@ -6,7 +6,7 @@ import * as ort from "onnxruntime-node";
 import { createCanvas, loadImage, createImageData, ImageData as CanvasImageData } from "canvas"
 // @ts-ignore
 import Ocr from '@gutenye/ocr-node'
-import { devLog } from '@/utils';
+import { devLog, writeLog } from '@/utils';
 import  { app} from 'electron';
 type loadImgType = string | CanvasImageData | Buffer ;
 
@@ -134,13 +134,13 @@ export async function getPaddleOcrResult(img ? : loadImgType): Promise<string | 
     key = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt');
   }
   let ocr;
-  writeFileSync('log.txt', det+'\n'+rec+'\n'+key+'\n');
+  writeLog(  '模型路径\n'+det+'\n'+rec+'\n'+key+'\n' );
   try
   {
     ocr = await Ocr.create({
       models : {
-        defaultDetectionPath: det,
-        defaultRecognitionPath: rec,
+        detectionPath: det,
+        recognitionPath: rec,
         dictionaryPath: key,
       } ,
       isDebug: false,

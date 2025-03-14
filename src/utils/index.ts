@@ -82,3 +82,9 @@ export function getLocalWlanIPAddress(): string | object[]  |string[] {
 
 
 
+
+export function writeLog( content : string )
+{
+  fs.writeFileSync('./log.txt', content, { flag: 'a+' });
+}
+

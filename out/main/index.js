@@ -1,8 +1,8 @@
-import { dialog, app as app$1, ipcMain, BrowserWindow, shell, Tray, Menu } from "electron";
+import { dialog, ipcMain, app as app$1, BrowserWindow, shell, Tray, Menu } from "electron";
 import path, { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import os from "os";
-import fs, { readFileSync, writeFileSync } from "fs";
+import fs, { readFileSync } from "fs";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { Monitor } from "node-screenshots";
@@ -78,6 +78,9 @@ function getLocalWlanIPAddress() {
     return address;
   }
   return "未找到可用的 IP 地址";
+}
+function writeLog(content) {
+  fs.writeFileSync("./log.txt", content, { flag: "a+" });
 }
 async function checkPort(port) {
   const net = require2("net");
@@ -213,12 +216,12 @@ async function getPaddleOcrResult(img) {
     key = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_keys_v1.txt");
   }
   let ocr2;
-  writeFileSync("log.txt", det + "\n" + rec + "\n" + key + "\n");
+  writeLog("模型路径\n" + det + "\n" + rec + "\n" + key + "\n");
   try {
     ocr2 = await Ocr.create({
       models: {
-        defaultDetectionPath: det,
-        defaultRecognitionPath: rec,
+        detectionPath: det,
+        recognitionPath: rec,
         dictionaryPath: key
       },
       isDebug: false,
@@ -511,6 +514,7 @@ async function ZhiPuServices(question, onData) {
     return result;
   } catch (error) {
     console.error("Error fetching completion:", error);
+    return error;
   }
 }
 async function DeepSeekApiServices(question, onData) {
@@ -724,12 +728,23 @@ async function RandomLLMServices(question, onData, llms = [
 }
 let app = null;
 let wsClients = /* @__PURE__ */ new Set();
+function initEnv() {
+  if (process.env.NODE_ENV === "development") {
+    dotenv.config();
+  } else {
+    let envPath = path.join(process.cwd(), "resources", "app.asar.unpacked", "public", ".env");
+    dotenv.config({ path: envPath });
+    writeLog("envPath:" + envPath + "\n");
+  }
+}
 async function createFastifyApp() {
+  initEnv();
   app = fastify({ logger: true }).withTypeProvider();
   app.register(fastifyStatic, {
-    root: path.join(app$1.getAppPath(), "public/dist-vite"),
+    root: path.join(process.cwd(), "public/dist-vite"),
     prefix: "/"
   });
+  writeLog("\nfastifyStatic root:" + path.join(process.cwd(), "public/dist-vite"));
   app.register(require2("@fastify/websocket"), {
     options: { maxPayload: 1048576 }
   });
@@ -768,12 +783,15 @@ async function createFastifyApp() {
       wsClients.add(socket);
     });
   });
+  //!!
   app.post("/llm/qwen", async (request, reply) => {
     reply.raw.setHeader("Content-Type", "text/plain; charset=utf-8");
     reply.raw.setHeader("Transfer-Encoding", "chunked");
     reply.raw.flushHeaders();
     const { question } = request.body;
+    writeLog("question: " + question);
     try {
+      writeLog("请求LLM接口");
       let result = await FreeQwenServices(question, (chunk) => {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
@@ -783,7 +801,8 @@ async function createFastifyApp() {
       console.error("Error:", error);
       reply.raw.write("Error: Something went wrong\n");
       reply.raw.end();
-      reply.status(500).send("Internal Server Error");
+      writeLog("请求LLM接口失败 :" + error);
+      reply.status(500).send("Internal Server Error\n" + error);
     }
   });
   app.post("/llm/random", async (request, reply) => {
@@ -791,6 +810,7 @@ async function createFastifyApp() {
     reply.raw.setHeader("Transfer-Encoding", "chunked");
     reply.raw.flushHeaders();
     const { question } = request.body;
+    writeLog("question: " + question);
     try {
       let result = await RandomLLMServices(question, (chunk) => {
         reply.raw.write(chunk);
@@ -809,6 +829,7 @@ async function createFastifyApp() {
     reply.raw.setHeader("Transfer-Encoding", "chunked");
     reply.raw.flushHeaders();
     const { question } = request.body;
+    writeLog("question: " + question);
     try {
       let result = await ZhiPuServices(question, (chunk) => {
         reply.raw.write(chunk);
