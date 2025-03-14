@@ -2,7 +2,8 @@ import { app, shell, BrowserWindow, Tray, Menu  } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { exist } from '@/utils/index'
-const iconPath= join(__dirname, '../../resources/victory.png')
+const iconPath = join(__dirname, '../../resources/sky3.jpg')
+const  ico = join(__dirname, '../../build/sky3.ico')
 import { startListeningRenderer } from './IpcMain'
 import { startClientServer } from './client'
 
@@ -26,10 +27,9 @@ function createWindow() {
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    icon: join(__dirname, '../../resources/victory.png'),
-    ...(process.platform === 'linux' ? { icon: iconPath } : {}),
+    icon: ico ,
+    ...(process.platform === 'linux' ? { icon: ico  } : {}),
     webPreferences: {
-      // 推荐使用preload  暴露node API
       contextIsolation: true, // 禁用上下文隔离
       nodeIntegration: false, // 禁用 Node.js 集成
       preload: preloadPath??  join(__dirname, '../preload/index.js') ,

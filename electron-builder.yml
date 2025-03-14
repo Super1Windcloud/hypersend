@@ -1,6 +1,6 @@
 appId: com.superwindcloud.hypersend
 productName: hypersend
-icon :  build/victory/icons/icon.ico
+icon :  build/sky3.ico
 
 directories:
   buildResources: build
@@ -22,7 +22,7 @@ win:
   target:  nsis
   defaultArch: x64
   executableName: hypersend
-  icon :  build/victory/icons/icon.ico
+  icon :  build/sky3.ico
   certificateFile: null
   certificatePassword: null
   certificateSubjectName: null
@@ -37,12 +37,29 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut:  false
   createStartMenuShortcut: true
-  installerIcon: build/victory/icons/icon.ico
+  installerIcon: build/sky3.ico
   uninstallerIcon: build/victory/icons/icon.ico
-  installerHeaderIcon: build/victory/icons/icon.ico
+  installerHeaderIcon:  build/sky3.ico
   oneClick: false
   perMachine : false
   allowToChangeInstallationDirectory: true
+
+
+msi:
+  additionalWixArgs: [] # 额外的 Wix 参数
+  artifactName: ${name}-${version}-setup.${ext} # 安装包名称
+  createDesktopShortcut: always # 是否创建桌面快捷方式
+  createStartMenuShortcut: true # 是否创建开始菜单快捷方式
+  menuCategory: false # 是否在开始菜单中创建子目录
+  oneClick: false # 是否启用一键安装
+  perMachine: false # 是否为所有用户安装
+  publish: null # 发布配置
+  runAfterFinish: true # 安装完成后是否运行应用程序
+  shortcutName: ${productName} # 快捷方式名称
+  upgradeCode: null # 升级代码
+  warningsAsErrors: true # 是否将警告视为错误
+
+
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
