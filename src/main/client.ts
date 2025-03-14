@@ -14,18 +14,24 @@ import { readFile } from 'fs/promises';
 import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/utils/api'
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
-
 async function createFastifyApp()
 {
   app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
-    root: path.join(process.cwd(), 'public/dist'),
+    root: path.join(process.cwd(), 'public/dist-vite'),
     prefix: '/'
   })
 
   app.register(require('@fastify/websocket'), {
     options: { maxPayload: 1048576 }
   })
+
+  //代理API
+  app.register(require('@fastify/http-proxy'), {
+    upstream: 'http://localhost:33333',
+    prefix: '/api', // optional
+    http2: false, // optional
+  });
 
   app.register(fastifyCors, {
     origin: '*', // 允许所有域名跨域访问
@@ -132,7 +138,7 @@ async function createFastifyApp()
   {
     try
     {
-      await reply.sendFile('./index.html')
+      await reply.sendFile('./vite.html')
     } catch (err)
     {
       reply.status(500).send('Internal Server Error')
