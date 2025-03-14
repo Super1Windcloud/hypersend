@@ -1,6 +1,5 @@
 node_modules
 dist
-out
 .DS_Store
 .eslintcache
 *.log*
@@ -8,9 +7,10 @@ out
 
 build
 
-img
-
+forge_make
 dist_forge
+
+img
 
 .env.local
 .env.development.local

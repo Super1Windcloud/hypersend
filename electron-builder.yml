@@ -12,11 +12,13 @@ files:
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 
+# asar : true
 
 asarUnpack:
   - resources/**
+  - public/**
 
-asar : true
+
 
 win:
   target:  nsis

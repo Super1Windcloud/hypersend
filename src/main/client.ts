@@ -11,6 +11,7 @@ import { AliOcrClient } from './request'
 import clipboardy from 'clipboardy';
 import { dialog } from 'electron';
 import { readFile } from 'fs/promises';
+import { app as electronApp } from 'electron';
 import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/utils/api'
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
@@ -18,7 +19,7 @@ async function createFastifyApp()
 {
   app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
-    root: path.join(process.cwd(), 'public/dist-vite'),
+    root: path.join(electronApp.getAppPath(), 'public/dist-vite'),
     prefix: '/'
   })
 
@@ -38,6 +39,18 @@ async function createFastifyApp()
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // 允许的 HTTP 方法
     allowedHeaders: ['Content-Type', 'Authorization'] // 允许的请求头
   })
+
+  app.get('/', async (request, reply) =>
+  {
+    try
+    {
+      await reply.sendFile('./vite.html')
+    } catch (err)
+    {
+      reply.status(500).send('Internal Server Error')
+    }
+  })
+
   app.register(async function (fastify)
   {
     fastify.get('/ws', { websocket: true }, async (socket: WebSocket, req: FastifyRequest) =>
@@ -134,16 +147,7 @@ async function createFastifyApp()
     }
   })
 
-  app.get('/', async (request, reply) =>
-  {
-    try
-    {
-      await reply.sendFile('./vite.html')
-    } catch (err)
-    {
-      reply.status(500).send('Internal Server Error')
-    }
-  })
+
   app.get('/json', async (request, reply) =>
   {
     await reply.send({ message: 'Hello, World!' })
