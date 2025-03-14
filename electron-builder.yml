@@ -1,8 +1,9 @@
 appId: com.superwindcloud.hypersend
 productName: hypersend
-icon: build/sky3.ico
+
 
 directories:
+  output: dist
   buildResources: build
 
 files:
@@ -21,16 +22,17 @@ files:
 
 asar: true
 
+icon : build/icon.ico
 asarUnpack:
   - resources/**
   - public/**
   - esearch/**
 
 win:
+  icon : build/icons/icon.ico
   target: nsis
   defaultArch: x64
   executableName: hypersend
-  icon: build/sky3.ico
   certificateFile: null
   certificatePassword: null
   certificateSubjectName: null
