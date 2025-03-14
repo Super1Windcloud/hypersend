@@ -1,4 +1,4 @@
-import { dialog, app as app$1, ipcMain, BrowserWindow, shell, Tray, Menu } from "electron";
+import { app as app$1, dialog, ipcMain, BrowserWindow, shell, Tray, Menu } from "electron";
 import path, { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import os from "os";
@@ -143,6 +143,10 @@ function captureScreenMonitorToPNG() {
     console.error("No image captured");
     return;
   }
+  let dir = `img`;
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
   fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync());
   let monitors = Monitor.all();
   monitors.forEach((capturer) => {
@@ -198,9 +202,17 @@ async function getOcrEsearchResult(imgCanvas) {
   }
 }
 async function getPaddleOcrResult(img) {
-  let det = process.cwd() + "\\esearch\\ppocr_det.onnx";
-  let rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
-  let key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
+  let det, rec, key;
+  if (process.env.NODE_ENV === "development") {
+    det = process.cwd() + "\\esearch\\ppocr_det.onnx";
+    rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
+    key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
+  } else if (process.env.NODE_ENV === "production") {
+    const appPath = app$1.getAppPath();
+    det = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_det.onnx");
+    rec = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_rec.onnx");
+    key = path.join(appPath, "resources", "app.asar.unpacked", "esearch", "ppocr_keys_v1.txt");
+  }
   const ocr2 = await Ocr.create({
     isDebug: false,
     debugOutputDir: "./outputLog",
@@ -856,7 +868,7 @@ async function createFastifyApp() {
       await reply.send(image);
     } catch (err) {
       console.error(err);
-      reply.status(500).send("Internal Server Error");
+      reply.status(500).send("request capture router Internal Server Error\n" + err);
     }
   });
   return app;

@@ -226,7 +226,7 @@ async function createFastifyApp()
     } catch (err)
     {
       console.error (err)
-      reply.status(500).send('Internal Server Error')
+      reply.status(500).send('request capture router Internal Server Error\n'+err)
     }
   })
 

@@ -1,13 +1,13 @@
 import { createWorker } from 'tesseract.js'
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
 import * as ocr from "esearch-ocr";
 import * as ort from "onnxruntime-node";
 import { createCanvas, loadImage, createImageData, ImageData as CanvasImageData } from "canvas"
 // @ts-ignore
 import Ocr from '@gutenye/ocr-node'
 import { devLog } from '@/utils';
-
+import  { app} from 'electron';
 type loadImgType = string | CanvasImageData | Buffer ;
 
 
@@ -121,9 +121,20 @@ export async function getPaddleOcrResult(img ? : loadImgType): Promise<string | 
    * defaultRecognitionPath:   ch_PP-OCRv4_rec_infer.onnx',
    *  dictionaryPath  :  'ppocr_keys_v1.txt',
    */
-  let det = process.cwd() + "\\esearch\\ppocr_det.onnx";
-  let rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
-  let  key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
+  let det, rec, key;
+  if (process.env.NODE_ENV === 'development')
+  {
+      det = process.cwd() + "\\esearch\\ppocr_det.onnx";
+      rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
+      key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
+  } else if (process.env.NODE_ENV === 'production')
+  {
+    const appPath = app.getAppPath();
+      det = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_det.onnx');
+      rec = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_rec.onnx');
+      key = path.join(appPath, 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt');
+  }
+
   const ocr = await Ocr.create({
     isDebug: false ,
     debugOutputDir: './outputLog',

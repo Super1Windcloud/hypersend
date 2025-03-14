@@ -67,7 +67,10 @@ export   function captureScreenMonitorToPNG ()
   let monitor = Monitor.fromPoint(100, 100)
   devLog(monitor, monitor?.id)
   let image   = monitor?.captureImageSync()
-  if (!image)  {  console.error('No image captured');  return }
+  if (!image) { console.error('No image captured'); return }
+  let dir  = `img`;
+  if (!fs.existsSync(dir)){  fs.mkdirSync(dir, { recursive: true });}
+
   fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync())
 
   let monitors = Monitor.all()

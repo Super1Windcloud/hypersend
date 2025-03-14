@@ -17,6 +17,7 @@ files:
 asarUnpack:
   - resources/**
   - public/**
+  - esearch/**
 
 
 
