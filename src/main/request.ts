@@ -15,6 +15,7 @@ dotenv.config()
 export class AliOcrClient {
 
 
+  // 定义一个静态方法 createClient，用于创建 OCR API 客户端实例
   static  createClient(): ocr_api20210707
   {
        let id = process.env['ALIBABA_CLOUD_ACCESS_KEY_ID']
@@ -53,13 +54,6 @@ export class AliOcrClient {
     }
   }
 }
-
-
-
-
-
-
-
 
 
 export function createAppLLMServices( app :  FastifyInstance)

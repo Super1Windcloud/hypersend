@@ -1,9 +1,9 @@
-import fastify, { type FastifyRequest, type FastifyInstance, type FastifyServerOptions } from 'fastify'
+import fastify, { type FastifyRequest, type FastifyInstance  } from 'fastify'
 import path from 'path'
 import { devLog, writeLog } from '@/utils'
 import ws, { type WebSocket } from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
-import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort } from './system'
+import { captureScreenMonitorToPNG, checkAndKillPort } from './system'
 import fastifyCors from '@fastify/cors'
 import { base64ToBuffer, blobUrlToBuffer, getOcrEsearchResult, getOcrTesseractResult, getPaddleOcrResult } from './ocr';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'

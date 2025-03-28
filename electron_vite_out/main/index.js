@@ -679,6 +679,7 @@ async function RandomLLMServices(question, onData, llms = [
 }
 dotenv.config();
 class AliOcrClient {
+  // 定义一个静态方法 createClient，用于创建 OCR API 客户端实例
   static createClient() {
     let id = process.env["ALIBABA_CLOUD_ACCESS_KEY_ID"];
     let secret = process.env["ALIBABA_CLOUD_ACCESS_KEY_SECRET"];

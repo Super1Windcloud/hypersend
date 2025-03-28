@@ -65,9 +65,6 @@ importers:
       electron-updater:
         specifier: ^6.3.9
         version: 6.3.9
-      esearch-ocr:
-        specifier: ^6.0.3
-        version: 6.0.3(@techstark/opencv-js@4.10.0-release.1)
       express:
         specifier: ^4.21.2
         version: 4.21.2
@@ -1163,9 +1160,6 @@ packages:
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
 
-  '@techstark/opencv-js@4.10.0-release.1':
-    resolution: {integrity: sha512-S4XELidRiQeA0q1s9VQLo540wCxUo24r1O4C+LqZ6llX+sPCXvZCPv3Ice8dEIr0uavyZ8YZeKXSBdDgMXSXjw==}
-
   '@techstark/opencv-js@4.9.0-release.3':
     resolution: {integrity: sha512-y+KoLLlkXVUHWozYlN1vmMD9TQMPJObqml5nPA5vPWgHtOgm8q5O74UtzM23eayidvmeFX6tF5e2gDdyxcpy3Q==}
 
@@ -1950,11 +1944,6 @@ packages:
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
-
-  esearch-ocr@6.0.3:
-    resolution: {integrity: sha512-Y2dnu8nmOxP+V3b0EjxtLBMGMd/cUUCyAKkIBFp6bnZ7EUfPCSwuvk/p8MA6hMxewuQvU2uxzYi/vH/fT+4Puw==}
-    peerDependencies:
-      '@techstark/opencv-js': 4.10.0-release.1
 
   eslint-config-prettier@10.0.1:
     resolution: {integrity: sha512-lZBts941cyJyeaooiKxAtzoPHTN+GbQTJFAIdQbRhA4/8whaAraEh47Whw/ZFfrjNSnlAxqfm9i0XVAEkULjCw==}
@@ -5674,8 +5663,6 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@techstark/opencv-js@4.10.0-release.1': {}
-
   '@techstark/opencv-js@4.9.0-release.3': {}
 
   '@tootallnate/once@2.0.0': {}
@@ -6703,12 +6690,6 @@ snapshots:
   escape-string-regexp@1.0.5: {}
 
   escape-string-regexp@4.0.0: {}
-
-  esearch-ocr@6.0.3(@techstark/opencv-js@4.10.0-release.1):
-    dependencies:
-      '@techstark/opencv-js': 4.10.0-release.1
-      js-clipper: 1.0.1
-      onnxruntime-common: 1.20.1
 
   eslint-config-prettier@10.0.1(eslint@9.21.0):
     dependencies:
