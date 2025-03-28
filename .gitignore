@@ -26,6 +26,6 @@ img
 .env.development
 .env.test
 .env.production
-
+.env.yarn 
 
 forge-make
