@@ -23,7 +23,7 @@ export function devAssert(...args: any[])
 
 export function devLog(...args: any[]) {
   if (process.env.NODE_ENV === 'development') {
-    console.log(...args)
+    console.log('[DEV]', ...args)
   }
 }
 export function getLocalIPAddress() : string  | string[][]  {

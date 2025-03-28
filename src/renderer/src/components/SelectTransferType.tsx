@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { TextInputModel } from './TextInputModel'
 import { useState } from 'react'
-import { electron } from 'process'
 
 const SelectTitle = styled.h2`
   font-size: 16px;

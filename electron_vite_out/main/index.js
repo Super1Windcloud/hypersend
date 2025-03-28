@@ -2,15 +2,11 @@ import { dialog, ipcMain, app as app$1, BrowserWindow, shell, Tray, Menu } from 
 import path, { join } from "path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import os from "os";
-import fs, { readFileSync, createWriteStream } from "fs";
+import fs, { createWriteStream } from "fs";
 import fastify from "fastify";
 import fastifyStatic from "@fastify/static";
 import { Monitor } from "node-screenshots";
 import fastifyCors from "@fastify/cors";
-import { createWorker } from "tesseract.js";
-import * as ocr from "esearch-ocr";
-import * as ort from "onnxruntime-node";
-import { createImageData, createCanvas } from "canvas";
 import Ocr from "@gutenye/ocr-node";
 import * as ocr_api20210707 from "@alicloud/ocr-api20210707";
 import ocr_api20210707__default from "@alicloud/ocr-api20210707";
@@ -30,7 +26,7 @@ function exist(path2) {
 }
 function devLog(...args) {
   if (process.env.NODE_ENV === "development") {
-    console.log(...args);
+    console.log("[DEV]", ...args);
   }
 }
 function getLocalIPAddress() {
@@ -166,44 +162,6 @@ function captureScreenMonitorToPNG() {
   });
   return image.toPngSync();
 }
-async function getOcrTesseractResult(image) {
-  const worker = await createWorker(["eng", "chi_sim"], 1, {
-    logger: (m) => console.log(m)
-    // Add logger here
-  });
-  const ret = await worker.recognize(image);
-  devLog(ret.data.text);
-  await worker.terminate();
-  return ret.data.text;
-}
-async function getOcrEsearchResult(imgCanvas) {
-  try {
-    let det = process.cwd() + "\\esearch\\ppocr_det.onnx";
-    let rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
-    console.log(det, rec);
-    let ppocr_keys_path = join(process.cwd(), "esearch/ppocr_keys_v1.txt");
-    let ppocr_keys = readFileSync(ppocr_keys_path, "utf-8");
-    let ocrObj = await ocr.init({
-      detPath: det,
-      recPath: rec,
-      dic: ppocr_keys,
-      detRatio: 0.75,
-      ort,
-      canvas: (w, h) => createCanvas(w, h),
-      imageData: createImageData
-    });
-    ocrObj.ocr(imgCanvas).then((result) => {
-      console.log(result.src);
-      const tl = result.parragraphs.map((i) => i.text);
-      console.log(tl.join("\n"));
-    }).catch((e) => {
-      console.error(e);
-    });
-  } catch (error) {
-    console.error("Error in getOcrEsearchResult:", error);
-    throw error;
-  }
-}
 async function getPaddleOcrResult(img) {
   let det, rec, key;
   if (process.env.NODE_ENV === "development") {
@@ -215,10 +173,10 @@ async function getPaddleOcrResult(img) {
     rec = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_rec.onnx");
     key = path.join(process.cwd(), "resources", "app.asar.unpacked", "esearch", "ppocr_keys_v1.txt");
   }
-  let ocr2;
+  let ocr;
   writeLog("模型路径\n" + det + "\n" + rec + "\n" + key + "\n");
   try {
-    ocr2 = await Ocr.create({
+    ocr = await Ocr.create({
       models: {
         detectionPath: det,
         recognitionPath: rec,
@@ -231,7 +189,7 @@ async function getPaddleOcrResult(img) {
     console.error("Error in getPaddleOcrResult:", error);
     throw error + "\n 模型路径" + det;
   }
-  const result = await ocr2.detect(img);
+  const result = await ocr.detect(img);
   let text = result.map(({ text: text2 }) => text2).join("\n");
   devLog(text);
   return text;
@@ -1045,26 +1003,6 @@ async function createFastifyApp() {
       reply.status(500).send("ocr ali router Internal Server Error");
     }
   });
-  app.post("/ocr/tesseract", async (request, reply) => {
-    try {
-      let { url } = request.body;
-      let ocrStr = await getOcrTesseractResult(url);
-      await reply.send(ocrStr);
-    } catch (err) {
-      console.error(err);
-      reply.status(500).send("ocr  tesseract router Internal Server Error");
-    }
-  });
-  app.post("/ocr/esearch", async (request, reply) => {
-    try {
-      let { url } = request.body;
-      let ocrStr = await getOcrEsearchResult(url);
-      await reply.send(ocrStr);
-    } catch (err) {
-      console.error(err);
-      reply.status(500).send("ocr  esearchOcr   router Internal Server Error");
-    }
-  });
   app.post("/ocr/paddleOcr", async (request, reply) => {
     try {
       let { url } = request.body;
@@ -1203,7 +1141,7 @@ function startListeningRenderer() {
     return getLocalWlanIPAddress();
   });
   ipcMain.on("sendMessage", (event, message) => {
-    devLog("ipcmain sendMessage to  client", message);
+    devLog("ipcmain sendMessage to  client ", message, "from event :", event.sender);
     sendMessageToClient(message);
   });
   ipcMain.handle("openFile", async () => {

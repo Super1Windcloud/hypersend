@@ -2,11 +2,16 @@
 
 import { writeLog } from '@/utils';
 import ocr_api20210707, * as $ocr_api20210707 from '@alicloud/ocr-api20210707'
-import OpenApi, * as $OpenApi from '@alicloud/openapi-client'
-import Util, * as $Util from '@alicloud/tea-util'
+import  * as $OpenApi from '@alicloud/openapi-client'
+import   * as $Util from '@alicloud/tea-util'
 import dotenv from 'dotenv'
 import { type FastifyInstance }  from 'fastify';
-import { aliQwen2_5, aliQwenMax, aliQwenPlus, aliQwenQwQ32B, DeepSeekApiServices, DoubaoLiteServices, DoubaoServicesDeepSeek, DoubaoServicesPro, envPrint,KimiServices, RandomLLMServices, SiliconflowServices, ZhiPuServices } from '@/utils/api'
+import
+  {
+    aliQwen2_5, aliQwenMax, aliQwenPlus, aliQwenQwQ32B, DeepSeekApiServices,
+    DoubaoLiteServices, DoubaoServicesDeepSeek, DoubaoServicesPro, KimiServices,
+    RandomLLMServices, SiliconflowServices, ZhiPuServices
+  } from '@/utils/api'
 
 
 
@@ -47,9 +52,10 @@ export class AliOcrClient {
       )
       let data = response.body?.data
       return data ?? ''
-    } catch (error: any) {
-      console.log(error.message)
-      console.log(error.data['Recommend'])
+    } catch (err : any) {
+
+      const error = err instanceof Error ? err : new Error(String(err));
+      console.error(error.message);
       return error.message
     }
   }
@@ -73,6 +79,12 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        reply.raw.write('Error: Something went wrong\n');
+        writeLog("请求LLM接口失败 :" + result.message);
+      }
+
       reply.raw.end();
     } catch (error)
     {
@@ -93,7 +105,7 @@ export function createAppLLMServices( app :  FastifyInstance)
     try
     {
       writeLog("请求LLM接口");
-      let result = await aliQwen2_5(question, (chunk: string) =>
+       await aliQwen2_5(question, (chunk: string) =>
       {
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
@@ -118,7 +130,7 @@ export function createAppLLMServices( app :  FastifyInstance)
     try
     {
       writeLog("请求LLM接口");
-      let result = await aliQwenMax(question, (chunk: string) =>
+       await aliQwenMax(question, (chunk: string) =>
       {
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
@@ -148,6 +160,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        reply.raw.write('Error: Something went wrong\n');
+        writeLog("请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -173,6 +190,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        writeLog("请求LLM接口失败 :" + result.message);
+        reply.raw.write('Error: siliconflows接口请求失败 went wrong\n');
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -198,6 +220,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        reply.raw.write('Error: deepseek接口请求失败 went wrong\n');
+        writeLog("deepseek 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -223,6 +250,10 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result  instanceof   Error ) {
+        reply.raw.write('Error: kimi接口请求失败 went wrong\n');
+        writeLog("kimi 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -248,6 +279,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result  instanceof Error)
+      {
+         reply.raw.write('Error: doubao_lite接口请求失败 went wrong\n');
+         writeLog("doubao_lite 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -273,6 +309,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        reply.raw.write('Error: doubao_pro接口请求失败 went wrong\n');
+         writeLog("doubao_pro 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -298,6 +339,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
+      if (result instanceof Error)
+      {
+        writeLog("doubao_deepseek 请求LLM接口失败 :" + result.message);
+        reply.raw.write('Error: doubao_deepseek接口请求失败 went wrong\n');
+      }
       reply.raw.end();
     } catch (error)
     {
@@ -319,7 +365,8 @@ export function createAppLLMServices( app :  FastifyInstance)
     writeLog('question: ' + question)
     try
     {
-      let result = await RandomLLMServices(question, (chunk: string) =>
+      //@ts-ignore
+       let result =  await RandomLLMServices(question, (chunk: string) =>
       {
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
@@ -349,7 +396,11 @@ export function createAppLLMServices( app :  FastifyInstance)
         reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk);
       })
-      //  console.log(result);
+      if (result instanceof Error)
+      {
+        reply.raw.write('Error: codegeex接口请求失败 went wrong\n');
+        writeLog("codegeex 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error)
     {

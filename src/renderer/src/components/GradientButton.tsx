@@ -1,6 +1,6 @@
-import React, { forwardRef, Suspense } from 'react'
+import { forwardRef   } from 'react'
 import { AntDesignOutlined } from '@ant-design/icons'
-import { Button, ConfigProvider, message, Space } from 'antd'
+import { Button, ConfigProvider, Space } from 'antd'
 import { createStyles } from 'antd-style'
 
 const useStyle = createStyles(({ prefixCls, css }) => ({

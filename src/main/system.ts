@@ -1,6 +1,6 @@
 import { devLog  } from '@/utils'
  import  fs from 'fs'
- import { Monitor ,Window  }   from  'node-screenshots';
+ import { Monitor   }   from  'node-screenshots';
 export async function checkPort(port) {
   const net = require('net')
 
@@ -27,6 +27,7 @@ export async function killProcessByPort(port) {
     exec(`lsof -i :${port}`, (err, stdout, stderr) => {
       if (err) {
         reject(err)
+        devLog(`Error: ${err.message}\nStderr: ${stderr}`)
         return
       }
       const lines = stdout.split('\n')
@@ -35,6 +36,8 @@ export async function killProcessByPort(port) {
         exec(`kill -9 ${pid}`, (err, stdout, stderr) => {
           if (err) {
             reject(err)
+            devLog(`Error: ${err.message}\nStdout: ${stdout}`)
+            devLog(`Error: ${err.message}\nStderr: ${stderr}`)
           } else {
             resolve()
           }

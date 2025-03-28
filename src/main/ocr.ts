@@ -1,32 +1,12 @@
-import { createWorker } from 'tesseract.js'
-import { readFileSync, writeFileSync } from 'fs';
-import path, { join } from 'path';
-import * as ocr from "esearch-ocr";
-import * as ort from "onnxruntime-node";
-import { createCanvas, loadImage, createImageData, ImageData as CanvasImageData } from "canvas"
+import { readFileSync  } from 'fs';
+import path  from 'path';
 // @ts-ignore
 import Ocr from '@gutenye/ocr-node'
 import { devLog, writeLog } from '@/utils';
-import  { app} from 'electron';
 type loadImgType = string | CanvasImageData | Buffer ;
 
 
-export  async function getOcrTesseractResult(image: string): Promise<string> {
-  const worker = await createWorker(['eng', 'chi_sim'], 1, {
-    logger: (m) => console.log(m) // Add logger here
-  })
-  const ret = await worker.recognize(image)
-  devLog(ret.data.text)
-  await worker.terminate()
 
-  return ret.data.text
-}
-
-
-async function blobUrlToCanvas(blobUrl: string): Promise<HTMLCanvasElement | void >
-{
-
-}
 async function imagePathToloadImgType(imageSource: string): Promise<loadImgType>
 {
   try
@@ -55,58 +35,9 @@ async function imagePathToloadImgType(imageSource: string): Promise<loadImgType>
   }
 }
 
-export async function getOcrEsearchResult(imgCanvas  : loadImgType) : Promise<string | void>
-{
-  try
-  {
-    let det = process.cwd() + "\\esearch\\ppocr_det.onnx";
-    let rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
-    console.log(det, rec);
-    let ppocr_keys_path = join(process.cwd(), "esearch/ppocr_keys_v1.txt");
-    let ppocr_keys = readFileSync(ppocr_keys_path, "utf-8");
-     let  ocrObj =   await ocr.init({
-       detPath: det,
-       recPath: rec,
-       dic: ppocr_keys,
-       detRatio: 0.75,
-       ort,
-       canvas: (w, h) => createCanvas(w, h),
-       imageData: createImageData
-    });
-     ocrObj .ocr( imgCanvas )
-      .then((result) =>
-      {
-        console.log(result.src);
-        const tl = result .parragraphs.map((i) => i.text);
-        console.log(tl.join("\n"));
-    })
-      .catch((e) => { console.error(e) } );
-
-  } catch (error)
-  {
-    console.error('Error in getOcrEsearchResult:', error);
-    throw error; // 重新抛出错误，以便调用者处理
-  }
-}
 
 
 
-function testEsearch()
-{
-  ; (async () =>
-  {
-    try
-    {
-      let path = process.cwd() + "\\img\\65537-sync.png";
-      let canvas = await imagePathToloadImgType(path);
-      await getOcrEsearchResult(canvas);
-    } catch (error)
-    {
-      console.error('Error in main async function:', error);
-    }
-  })();
-
-}
 
 type PaddleOcrResultType = {
   mean : number;
@@ -181,6 +112,9 @@ export function base64ToBuffer( base64: string ): Buffer
   return Buffer.from(base64, 'base64');
 }
 
+
+
+//@ts-ignore
 async function testPaddleOcr()
 {
   let path = process.cwd() + "\\img\\leecode.png";

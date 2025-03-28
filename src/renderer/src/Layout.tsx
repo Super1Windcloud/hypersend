@@ -1,7 +1,7 @@
 import React from 'react'
-import { Flex, Layout } from 'antd'
+import {  Layout } from 'antd'
 
-const { Header, Footer, Sider, Content } = Layout
+const { Header, Footer  } = Layout
 
 const headerStyle: React.CSSProperties = {
   textAlign: 'center',
@@ -29,7 +29,7 @@ const App: React.FC = () => (
     <SelectTransferType />
     <ConnectToPeerNearbyDevices />
     <Footer style={{ backgroundColor: 'transparent' }}>
-      <p className="tip" style={{ color: 'violet', backgroundColor: 'transparent' }}>
+      <p  className="tip" style={{ color: 'violet', backgroundColor: 'transparent' }}>
         请确保传输目标设备处于同一局域网Wi-Fi内，然后访问监听设备IP加端口号进行连接。
       </p>
     </Footer>

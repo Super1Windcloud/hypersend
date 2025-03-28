@@ -1,8 +1,8 @@
 import styled, { keyframes, css } from 'styled-components'
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { ConnectButton } from '@renderer/components/ConnectButton'
 
-import { Button, Spin } from 'antd'
+import {  Spin } from 'antd'
 
 
   type    IconProps  = {
@@ -26,6 +26,7 @@ const Icon = styled.div<IconProps>`
       animation: ${rotateAnimation} 3s linear;
     `}
 `
+//@ts-ignore
 const IconWithChildren = (props: IconProps) => {
   const { isRotating, children, ...restProps } = props
   return (
@@ -62,9 +63,11 @@ const Title = styled.div`
 
 
 
-
-const ConnectToPeerNearbyDevices = () => {
+const ConnectToPeerNearbyDevices = () =>
+{
+  //@ts-ignore
   const [isRotating, setIsRotating] = useState(false)
+  //@ts-ignore
   const handleRefresh = () => {
     setIsRotating(true)
     setTimeout(() => {

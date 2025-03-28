@@ -57,9 +57,11 @@ export async function SiliconflowServices(question?: string, onData?: (chunk: st
       }
     }
     return result;
-  } catch (error)
+  } catch (err )
   {
-    console.error('Error fetching completion:', error);
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error('Error fetching completion:', error.message );
+    return error;
   }
 }
 
@@ -107,6 +109,7 @@ export async function DoubaoLiteServices(question?: string, onData?: (chunk: str
   } catch (error)
   {
     console.error('调用备用豆包接口:', error)
+
     let result = await DoubaoServicesPro(question)
     return result
   }
@@ -151,10 +154,14 @@ export  async function DoubaoServicesPro(question?: string, onData?: (chunk: str
         }
       }
     }
+
     return result;
-  } catch (error)
+  } catch (err )
   {
-    console.error('豆包模型全部相应失败:', error)
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error('豆包模型全部相应失败:', error.message )
+
+    return error;
   }
 }
 
@@ -200,9 +207,12 @@ export async function DoubaoServicesDeepSeek(question?: string, onData?: (chunk:
       }
     }
     return result;
-  } catch (error)
+  } catch (err )
   {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error('Error fetching completion:', error)
+    return error;
   }
 }
 
@@ -249,9 +259,12 @@ export async function KimiServices(question?: string, onData?: (chunk: string) =
       }
     }
     return result;
-  } catch (error)
+  } catch (err )
   {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error('Error fetching completion:', error)
+    return error;
   }
 }
 
@@ -300,8 +313,10 @@ export async function ZhiPuServices(question?: string, onData?: (chunk: string) 
       }
     }
     return result;
-  } catch (error)
+  } catch (err )
   {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error('Error fetching completion:', error)
     return error;
   }
@@ -325,6 +340,9 @@ export async function DeepSeekApiServices(question?: string, onData?: (chunk: st
       stream: true
     })
   let result = '';
+  try
+  {
+
   for await (const chunk of completion)
   {
     if (chunk.choices && chunk.choices.length > 0)
@@ -340,7 +358,14 @@ export async function DeepSeekApiServices(question?: string, onData?: (chunk: st
       }
     }
   }
-  return result;
+    return result;
+  }
+  catch (err)
+  {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
+  }
 }
 
 
@@ -397,10 +422,14 @@ export async function aliQwenQwQ32B(question?: string, onData?: (chunk: string) 
           onData(delta.content );
         }
       }
+
     }
-  } catch (error)
+    return null ;
+  } catch (err )
   {
-    console.error('Error:', error)
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
   }
 }
 export  async function aliQwen2_5(question?: string, onData?: (chunk: string) => void)
@@ -490,10 +519,14 @@ export  async function aliQwenPlus(question?: string, onData?: (chunk: string) =
           onData(delta.content );
         }
       }
+
     }
-  } catch (error)
+    return null;
+  } catch (err )
   {
-    console.error('Error:', error)
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
   }
 }
 

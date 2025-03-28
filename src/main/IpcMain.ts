@@ -16,9 +16,9 @@ export function startListeningRenderer()   {
   })
 
 
-  ipcMain.on('sendMessage' ,    (event ,  message) =>
+  ipcMain.on('sendMessage' ,    (event : Electron.IpcMainEvent ,  message) =>
   {
-     devLog("ipcmain sendMessage to  client", message    )
+     devLog("ipcmain sendMessage to  client ", message, "from event :" ,event.sender  )
      sendMessageToClient(message)
   })
 

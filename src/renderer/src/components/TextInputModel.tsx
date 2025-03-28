@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, ConfigProvider, Modal, Space } from 'antd'
+import { Modal } from 'antd'
 import { createStyles, useTheme } from 'antd-style'
 
 const useStyle = createStyles(({ token }) => ({
@@ -67,10 +67,9 @@ export const TextInputModel: React.FC<TextInputModelProps> = ({ isModalOpen, tog
       boxShadow: '0 0 30px #999'
     }
   }
-  const [inputValue, setInputValue] = useState('') 
-  
+  const [inputValue, setInputValue] = useState('')
+
   function sendInputText() {
-    let _ = toggleModal ? toggleModal(0, false) : null  
     window.electron.ipcRenderer.send('sendMessage', inputValue)
 
   }
@@ -79,7 +78,7 @@ export const TextInputModel: React.FC<TextInputModelProps> = ({ isModalOpen, tog
       <Modal
         title="请输入文本内容"
         open={isModalOpen ? isModalOpen[0] : false}
-        onOk ={ sendInputText } 
+        onOk ={ sendInputText }
         onCancel={() => (toggleModal ? toggleModal(0, false) : null)}
         footer={(_, { OkBtn, CancelBtn }) => (
           <>

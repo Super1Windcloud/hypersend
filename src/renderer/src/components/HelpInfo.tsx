@@ -29,7 +29,7 @@ const InfoRow = styled.div`
   margin-bottom: 5px;margin-right :10px;
 `
 
-// 定义图标的样式
+//@ts-ignore 
 const Icon = styled.div`
   background-color: inherit;
   border-radius: 50%;
