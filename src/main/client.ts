@@ -7,16 +7,16 @@ import { captureScreenMonitorToPNG, captureScreenWindowToBMP, checkAndKillPort }
 import fastifyCors from '@fastify/cors'
 import { base64ToBuffer, blobUrlToBuffer, getOcrEsearchResult, getOcrTesseractResult, getPaddleOcrResult } from './ocr';
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
-import { AliOcrClient } from './request'
+import { AliOcrClient, createAppLLMServices } from './request'
 import clipboardy from 'clipboardy';
 import { dialog } from 'electron';
 import { readFile } from 'fs/promises';
 
-import { envPrint, FreeQwenServices, RandomLLMServices, ZhiPuServices } from '@/utils/api'
 let app: FastifyInstance | null | undefined = null
 let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
 import dotenv from 'dotenv'
 import { createWriteStream } from 'fs'
+import { envPrint } from '@/utils/api'
 
 
 function initEnv()
@@ -103,81 +103,7 @@ async function createFastifyApp()
     })
 
   })
-  //!!
-  app.post('/llm/qwen', async (request, reply) =>
-  {
-    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
-    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
-    reply.raw.flushHeaders(); // 立即发送响应头
-    const { question } = request.body as { question: string }
-    writeLog('question: ' + question)
-    try
-    {
-      writeLog("请求LLM接口");
-      let result = await FreeQwenServices(question, (chunk: string) =>
-      {
-        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
-        process.stdout.write(chunk);
-      })
-      reply.raw.end();
-    } catch (error)
-    {
-      console.error('Error:', error);
-      reply.raw.write('Error: Something went wrong\n');
-      reply.raw.end();
-      writeLog("请求LLM接口失败 :" + error)
-      reply.status(500).send('Internal Server Error\n' + error)
-    }
-  })
-  app.post('/llm/random', async (request, reply) =>
-  {
-    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
-    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
-    reply.raw.flushHeaders(); // 立即发送响应头
-    const { question } = request.body as { question: string }
-    writeLog('question: ' + question)
-    try
-    {
-      let result = await RandomLLMServices(question, (chunk: string) =>
-      {
-        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
-        process.stdout.write(chunk);
-      })
-
-      reply.raw.end();
-    } catch (error)
-    {
-      console.error('Error:', error);
-      reply.raw.write('Error: Something went wrong\n');
-      reply.raw.end();
-      reply.status(500).send('Internal Server Error')
-    }
-  })
-
-  app.post('/llm/codegeex', async (request, reply) =>
-  {
-    reply.raw.setHeader('Content-Type', 'text/plain; charset=utf-8'); // 设定文本流
-    reply.raw.setHeader('Transfer-Encoding', 'chunked'); // 开启流式传输
-    reply.raw.flushHeaders(); // 立即发送响应头
-    const { question } = request.body as { question: string }
-    writeLog('question: ' + question)
-    try
-    {
-      let result = await ZhiPuServices(question, (chunk: string) =>
-      {
-        reply.raw.write(chunk); // 是用于将数据块逐步写入服务器响应流的方法
-        process.stdout.write(chunk);
-      })
-      //  console.log(result);
-      reply.raw.end();
-    } catch (error)
-    {
-      console.error('Error:', error);
-      reply.raw.write('Error: Something went wrong\n');
-      reply.raw.end();
-      reply.status(500).send('Internal Server Error')
-    }
-  })
+  createAppLLMServices( app );
 
 
   app.get('/json', async (request, reply) =>

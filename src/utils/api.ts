@@ -64,7 +64,7 @@ export async function SiliconflowServices(question?: string, onData?: (chunk: st
 }
 
 
-export async function DoubaoServices(question?: string, onData?: (chunk: string) => void)
+export async function DoubaoLiteServices(question?: string, onData?: (chunk: string) => void)
 {
   const client = new OpenAI({
     apiKey: process.env.DouBao,
@@ -107,12 +107,12 @@ export async function DoubaoServices(question?: string, onData?: (chunk: string)
   } catch (error)
   {
     console.error('调用备用豆包接口:', error)
-    let result = await DoubaoServicesBackup(question)
+    let result = await DoubaoServicesPro(question)
     return result
   }
 }
 
-async function DoubaoServicesBackup(question?: string, onData?: (chunk: string) => void)
+export  async function DoubaoServicesPro(question?: string, onData?: (chunk: string) => void)
 {
   const client = new OpenAI({
     apiKey: process.env.DouBao,
@@ -403,7 +403,7 @@ export async function aliQwenQwQ32B(question?: string, onData?: (chunk: string) 
     console.error('Error:', error)
   }
 }
-async function aliQwen2_5(question?: string, onData?: (chunk: string) => void)
+export  async function aliQwen2_5(question?: string, onData?: (chunk: string) => void)
 {
   const qwen = new OpenAI({
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
@@ -437,7 +437,7 @@ async function aliQwen2_5(question?: string, onData?: (chunk: string) => void)
   }
   return result;
 }
-async function aliQwenPlus(question?: string, onData?: (chunk: string) => void)
+export  async function aliQwenPlus(question?: string, onData?: (chunk: string) => void)
 {
 
   const ali = new OpenAI({
@@ -497,7 +497,7 @@ async function aliQwenPlus(question?: string, onData?: (chunk: string) => void)
   }
 }
 
-async function aliQwenMax(question?: string, onData?: (chunk: string) => void
+export   async function aliQwenMax(question?: string, onData?: (chunk: string) => void
 )
 {
   const qwen = new OpenAI({
@@ -562,8 +562,8 @@ export async function FreeQwenServices(question?: string, onData?: (chunk: strin
 export async function RandomLLMServices(question?: string, onData?: (chunk: string) => void,
   llms = [aliQwenQwQ32B
     , SiliconflowServices, DeepSeekApiServices
-    , ZhiPuServices, KimiServices, DoubaoServices
-    , DoubaoServicesDeepSeek, DoubaoServicesBackup])
+    , ZhiPuServices, KimiServices, DoubaoServicesPro
+    , DoubaoServicesDeepSeek, DoubaoServicesPro])
 {
   // let llms = [aliQwenQwQ32B
   //     , SiliconflowServices, DeepSeekApiServices

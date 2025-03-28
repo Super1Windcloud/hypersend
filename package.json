@@ -2,7 +2,7 @@
   "name": "HyperSend",
   "version": "7.7.7",
   "description": "An Electron application with React and TypeScript",
-  "main": "out/main/index.js",
+  "main": "./electron_vite_out/main/index.js",
   "author": "superwindcloud",
   "homepage": "https://gitee.com/superwindcloud/hypersend",
   "type": "module",
@@ -17,19 +17,18 @@
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
-    "start": "electron-vite preview",
-    "dev": "electron-vite dev --watch ",
+    "start": "electron-forge start",
+    "dev": "electron-vite dev --watch   --outDir electron_vite_out",
     "docker": "docker run -it -d --init --name kimi-free-api -p 8000:8000 -e TZ=Asia/Shanghai vinlic/kimi-free-api:latest && docker run -it -d --init --name deepseek-free-api -p 8888:8888  -e TZ=Asia/Shanghai  vinlic/deepseek-free-api:latest",
     "package:dry": "  electron-forge package",
     "zip": " electron-forge make  --skip-package -a x64 -p win32  --targets @electron-forge/maker-zip ",
     "make:dry": "electron-forge make",
-    "make": "electron-vite build  --outDir=dist_forge && electron-forge make",
-    "package": "electron-vite build  --outDir=dist_forge  &&  electron-forge package",
+    "make": "electron-forge make --verbose",
+    "package": "electron-vite build  --outDir=dist_forge &&  electron-forge package",
     "build": "npm run typecheck && electron-vite build",
-    "build:dry": "  electron-vite build",
-    "postinstall": "electron-builder install-app-deps",
+    "build:dry": "  electron-vite build  ",
     "unpack": "electron-vite build && electron-builder --dir --config ",
-    "unpack:dry" :"electron-builder --dir --config " ,
+    "unpack:dry": "electron-builder --dir --config ",
     "win_dry": "electron-vite build && electron-builder --win --config",
     "win-portable": "electron-vite  build  && electron-builder --win portable",
     "build:win": "npm run build && electron-builder --win --config ",
@@ -57,7 +56,6 @@
     "canvas": "^3.1.0",
     "clipboardy": "^4.0.0",
     "dotenv": "^16.4.7",
-    "electron-icon-builder": "^2.0.1",
     "electron-updater": "^6.3.9",
     "esearch-ocr": "^6.0.3",
     "express": "^4.21.2",
@@ -69,8 +67,8 @@
     "tesseract.js": "^6.0.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.7.0",
-    "@electron-forge/maker-squirrel": "^7.7.0",
+    "@electron-forge/cli": "^7.6.0",
+    "@electron-forge/maker-wix": "^7.6.0",
     "@electron-forge/maker-zip": "^7.7.0",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.0.0",
@@ -83,7 +81,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "babel-plugin-styled-components": "^2.1.4",
     "electron": "^34.2.0",
-    "electron-builder": "^25.1.8",
     "electron-vite": "^3.0.0",
     "eslint": "^9.21.0",
     "eslint-plugin-react": "^7.37.4",
@@ -93,6 +90,7 @@
     "prettier": "^3.5.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.3",
     "vite": "^6.1.1"
   },
@@ -100,6 +98,7 @@
     "onlyBuiltDependencies": [
       "electron",
       "tesseract.js",
+      "ts-node",
       "@fastify/websocket",
       "@electron-forge/cli",
       "@electron-forge/maker-squirrel",
@@ -111,12 +110,17 @@
       "onnxruntime-node",
       "canvas",
       "@gutenye/ocr-node",
-      "@fastify/http-proxy"
+      "@fastify/http-proxy",
+      "@electron-forge/maker-wix",
+      "@bitdisaster/exe-icon-extractor"
     ],
     "configDependencies": {
       "build-scripts-allowlist": "0.20250131.0+sha512-vuePnd+0F3PtuyFIHT1XsfOK7/BGkK1QmIMRHHPo+6LW7Wr/37QsQV3R/UztxoFWHHm9pSbCUovigSmeapfdLA=="
     },
-    "onlyBuiltDependenciesFile": "node_modules/.pnpm-config/build-scripts-allowlist/common.json"
+    "onlyBuiltDependenciesFile": "node_modules/.pnpm-config/build-scripts-allowlist/common.json",
+    "ignoredBuiltDependencies": [
+      "@bitdisaster/exe-icon-extractor"
+    ]
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.28"

@@ -2,7 +2,6 @@ import { resolve } from 'path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 export default defineConfig({
-
   main: {
     plugins: [externalizeDepsPlugin()],
     resolve: {
@@ -12,7 +11,7 @@ export default defineConfig({
       }
     },
     build: {
-
+      outDir: 'electron_vite_out/main'
     }
   },
   preload: {
@@ -24,6 +23,7 @@ export default defineConfig({
       }
     },
     build: {
+      outDir: 'electron_vite_out/preload'
 
     }
   },
@@ -36,6 +36,7 @@ export default defineConfig({
     },
     plugins: [react()]
     , build: {
+      outDir: 'electron_vite_out/renderer'
     }
   }
 

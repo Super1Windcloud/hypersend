@@ -5,7 +5,6 @@ productName: hypersend
 directories:
   output: dist
   buildResources: build
-
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -22,28 +21,22 @@ files:
 
 asar: true
 
-icon : build/icon.ico
 asarUnpack:
   - resources/**
   - public/**
   - esearch/**
 
 win:
-  icon : build/icons/icon.ico
+  icon :   build/sky3.ico
   target: nsis
   defaultArch: x64
-  executableName: hypersend
-  certificateFile: null
-  certificatePassword: null
-  certificateSubjectName: null
-  certificateSha1: null
-  signAndEditExecutable: false
+  executableName: HyperSend
   publisherName: Superwindcloud
   legalTrademarks: Superwindcloud
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName: ${productName}
+  shortcutName:  HyperSend
   uninstallDisplayName: ${productName}
   createDesktopShortcut: false
   createStartMenuShortcut: true

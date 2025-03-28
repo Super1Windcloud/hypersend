@@ -2,20 +2,147 @@
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
 A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
 question: 请使用python 编程语言
-##What?
-FastifyisanoPENOpenSourcWelcome
-eProject ud
-What?
-Individualsmakingsignificantandvaluable
-contributionsaregiven
-commit-accesstotheprojecttocontributeastheysee
-fit.Thisprojectismore
-likeanopenwikithanastandardguardedopensource
-project.
-Seeourinformalcontributingguideformore
-detailsoncontributingtothisproject.
->Iwanttobeacollaborator!
-Ifyouthinkyoumeettheabovecriteriaandwehave
-notinvitedyouyet,weare
-Lead请求LLM接口
+functionRequestAnswerFromLLM
+(llms.model)
+"aliQwenPlus"
+return awaitRequestAnswerFromQwenPlus(question,renderAnswer);
+"aliQwenMax":
+returnawaitRequestAnswerFromQwenMax(question,renderAnswer);
+"aliQwenQwQ32B"
+returnawaitRequestAnswerFromQwenQwQ32B(question,renderAnswer);
+"siliconflow-Qwen2.5":{
+returnawaitRequestAnswerFromSiliconflowQwenCquestion,renderAnswe
+"Deepseek-Chat":{
+returnawaitRequestAnswerFromDeepSeek(question,renderAnswer);
+"kimi-moonshot-vl-auto":{
+returnawaitRequestAnswerFromKiMi(question,renderAnswer);
+"douba0-1.5-lite-32k":请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPL
+上传请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+windcloud 没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPU:169
+上传：0.01请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPL
+上传请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+loud 没有找到匹配的大模型接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPU:27
+上传:0.0请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPU:
+上传:(请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口
+CPU:31%内存:74
+上传:0.01MB/s|下请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+#FastifyisanOpENOpenSource cWeLcomecometohypersendbysuperwindcLoud 投有
+Project##What?Individualsmakin..
+CPU:26%内存:74%显卡:--%
+cWeLcomecometohypersendbysuperwindcLou 上传：0.01MB/sI下载：0.01MB/s
+dCPU:26%内存：74%显卡+--%上传：0.01MB
+清空模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+nanaLe
+.handle.deletef
+transition:allo.3sease-in-out;
+&:hover,&:active{
+scale:1.2;
+animation:wobble1sboth;
+.handle.clear
+transition:allo.3sease-in-out;
+&:hover,&:active{
+scale:1.2;
+animation:rubberBand1sboth;
+@keyframeswobble
+@keyframesswing
+@keyframesshakeX
+rBang请求LLM接口模型路径
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_det.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_rec.onnx
+A:\Webstorm\Tauri_electron_app\electron_vite_react\HyperSend\esearch\ppocr_keys_v1.txt
+question: 请使用python 编程语言
+没有找到匹配的大模型接口请求LLM接口
