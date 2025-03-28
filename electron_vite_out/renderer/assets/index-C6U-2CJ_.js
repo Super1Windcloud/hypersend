@@ -17661,7 +17661,7 @@ var Panel = /* @__PURE__ */ React.forwardRef(function(props, ref) {
     style: sentinelStyle
   }));
 });
-var Content$2 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
+var Content$1 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
   var prefixCls = props.prefixCls, title = props.title, style2 = props.style, className = props.className, visible = props.visible, forceRender = props.forceRender, destroyOnClose = props.destroyOnClose, motionName = props.motionName, ariaId = props.ariaId, onVisibleChanged = props.onVisibleChanged, mousePosition2 = props.mousePosition;
   var dialogRef = reactExports.useRef();
   var _React$useState = reactExports.useState(), _React$useState2 = _slicedToArray$1(_React$useState, 2), transformOrigin = _React$useState2[0], setTransformOrigin = _React$useState2[1];
@@ -17695,7 +17695,7 @@ var Content$2 = /* @__PURE__ */ reactExports.forwardRef(function(props, ref) {
     }));
   });
 });
-Content$2.displayName = "Content";
+Content$1.displayName = "Content";
 var Mask = function Mask2(props) {
   var prefixCls = props.prefixCls, style2 = props.style, visible = props.visible, maskProps = props.maskProps, motionName = props.motionName, className = props.className;
   return /* @__PURE__ */ reactExports.createElement(CSSMotion, {
@@ -17820,7 +17820,7 @@ var Dialog = function Dialog2(props) {
     ref: wrapperRef,
     onClick: onWrapperClick,
     style: mergedStyle
-  }, wrapProps), /* @__PURE__ */ reactExports.createElement(Content$2, _extends({}, props, {
+  }, wrapProps), /* @__PURE__ */ reactExports.createElement(Content$1, _extends({}, props, {
     onMouseDown: onContentMouseDown,
     onMouseUp: onContentMouseUp,
     ref: contentRef,
@@ -24018,7 +24018,7 @@ const generateId = /* @__PURE__ */ (() => {
     return `${prefix2}${i}`;
   };
 })();
-const Sider$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
+const Sider = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     prefixCls: customizePrefixCls,
     className,
@@ -26931,7 +26931,7 @@ function useHasSider(siders, children, hasSider) {
     return true;
   }
   const childNodes = toArray$1(children);
-  return childNodes.some((node2) => node2.type === Sider$1);
+  return childNodes.some((node2) => node2.type === Sider);
 }
 var __rest$2 = function(s, e) {
   var t = {};
@@ -27033,7 +27033,7 @@ const Footer$1 = generator({
   tagName: "footer",
   displayName: "Footer"
 })(Basic);
-const Content$1 = generator({
+const Content = generator({
   suffixCls: "content",
   tagName: "main",
   displayName: "Content"
@@ -27041,8 +27041,8 @@ const Content$1 = generator({
 const Layout = Layout$1;
 Layout.Header = Header$1;
 Layout.Footer = Footer$1;
-Layout.Content = Content$1;
-Layout.Sider = Sider$1;
+Layout.Content = Content;
+Layout.Sider = Sider;
 Layout._InternalSiderContext = SiderContext;
 const viewSize = 100;
 const borderWidth = viewSize / 5;
@@ -31828,7 +31828,6 @@ const TextInputModel = ({ isModalOpen, toggleModal }) => {
   };
   const [inputValue, setInputValue] = reactExports.useState("");
   function sendInputText() {
-    toggleModal ? toggleModal(0, false) : null;
     window.electron.ipcRenderer.send("sendMessage", inputValue);
   }
   return /* @__PURE__ */ jsxRuntimeExports.jsx(jsxRuntimeExports.Fragment, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(
@@ -32200,7 +32199,7 @@ const ConnectToPeerNearbyDevices = () => {
     /* @__PURE__ */ jsxRuntimeExports.jsx(ConnectButton, {})
   ] });
 };
-const { Header, Footer, Sider, Content } = Layout;
+const { Header, Footer } = Layout;
 const headerStyle = {
   textAlign: "center",
   height: "auto",

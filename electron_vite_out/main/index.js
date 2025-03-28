@@ -102,6 +102,8 @@ async function killProcessByPort(port) {
     exec(`lsof -i :${port}`, (err, stdout, stderr) => {
       if (err) {
         reject(err);
+        devLog(`Error: ${err.message}
+Stderr: ${stderr}`);
         return;
       }
       const lines = stdout.split("\n");
@@ -110,6 +112,10 @@ async function killProcessByPort(port) {
         exec(`kill -9 ${pid}`, (err2, stdout2, stderr2) => {
           if (err2) {
             reject(err2);
+            devLog(`Error: ${err2.message}
+Stdout: ${stdout2}`);
+            devLog(`Error: ${err2.message}
+Stderr: ${stderr2}`);
           } else {
             resolve();
           }
@@ -243,8 +249,10 @@ async function SiliconflowServices(question, onData) {
       }
     }
     return result;
-  } catch (error) {
-    console.error("Error fetching completion:", error);
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error("Error fetching completion:", error.message);
+    return error;
   }
 }
 async function DoubaoLiteServices(question, onData) {
@@ -315,8 +323,10 @@ async function DoubaoServicesPro(question, onData) {
       }
     }
     return result;
-  } catch (error) {
-    console.error("豆包模型全部相应失败:", error);
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error("豆包模型全部相应失败:", error.message);
+    return error;
   }
 }
 async function DoubaoServicesDeepSeek(question, onData) {
@@ -353,8 +363,11 @@ async function DoubaoServicesDeepSeek(question, onData) {
       }
     }
     return result;
-  } catch (error) {
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error("Error fetching completion:", error);
+    return error;
   }
 }
 async function KimiServices(question, onData) {
@@ -391,8 +404,11 @@ async function KimiServices(question, onData) {
       }
     }
     return result;
-  } catch (error) {
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error("Error fetching completion:", error);
+    return error;
   }
 }
 async function ZhiPuServices(question, onData) {
@@ -433,7 +449,9 @@ async function ZhiPuServices(question, onData) {
       }
     }
     return result;
-  } catch (error) {
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
     console.error("Error fetching completion:", error);
     return error;
   }
@@ -453,18 +471,24 @@ async function DeepSeekApiServices(question, onData) {
     stream: true
   });
   let result = "";
-  for await (const chunk of completion) {
-    if (chunk.choices && chunk.choices.length > 0) {
-      const responseText = chunk.choices[0].delta?.content;
-      if (responseText) {
-        result += responseText;
-        if (onData) {
-          onData(responseText);
+  try {
+    for await (const chunk of completion) {
+      if (chunk.choices && chunk.choices.length > 0) {
+        const responseText = chunk.choices[0].delta?.content;
+        if (responseText) {
+          result += responseText;
+          if (onData) {
+            onData(responseText);
+          }
         }
       }
     }
+    return result;
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
   }
-  return result;
 }
 async function aliQwenQwQ32B(question, onData) {
   const ali = new OpenAI({
@@ -508,8 +532,11 @@ async function aliQwenQwQ32B(question, onData) {
         }
       }
     }
-  } catch (error) {
-    console.error("Error:", error);
+    return null;
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
   }
 }
 async function aliQwen2_5(question, onData) {
@@ -582,8 +609,11 @@ async function aliQwenPlus(question, onData) {
         }
       }
     }
-  } catch (error) {
-    console.error("Error:", error);
+    return null;
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    console.error(error.message);
+    return error;
   }
 }
 async function aliQwenMax(question, onData) {
@@ -666,9 +696,9 @@ class AliOcrClient {
       );
       let data = response.body?.data;
       return data ?? "";
-    } catch (error) {
-      console.log(error.message);
-      console.log(error.data["Recommend"]);
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error(String(err));
+      console.error(error.message);
       return error.message;
     }
   }
@@ -686,6 +716,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: Something went wrong\n");
+        writeLog("请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -703,7 +737,7 @@ function createAppLLMServices(app2) {
     writeLog("question: " + question);
     try {
       writeLog("请求LLM接口");
-      let result = await aliQwen2_5(question, (chunk) => {
+      await aliQwen2_5(question, (chunk) => {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
@@ -724,7 +758,7 @@ function createAppLLMServices(app2) {
     writeLog("question: " + question);
     try {
       writeLog("请求LLM接口");
-      let result = await aliQwenMax(question, (chunk) => {
+      await aliQwenMax(question, (chunk) => {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
@@ -749,6 +783,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: Something went wrong\n");
+        writeLog("请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -770,6 +808,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        writeLog("请求LLM接口失败 :" + result.message);
+        reply.raw.write("Error: siliconflows接口请求失败 went wrong\n");
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -791,6 +833,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: deepseek接口请求失败 went wrong\n");
+        writeLog("deepseek 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -812,6 +858,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: kimi接口请求失败 went wrong\n");
+        writeLog("kimi 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -833,6 +883,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: doubao_lite接口请求失败 went wrong\n");
+        writeLog("doubao_lite 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -854,6 +908,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: doubao_pro接口请求失败 went wrong\n");
+        writeLog("doubao_pro 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -875,6 +933,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        writeLog("doubao_deepseek 请求LLM接口失败 :" + result.message);
+        reply.raw.write("Error: doubao_deepseek接口请求失败 went wrong\n");
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
@@ -914,6 +976,10 @@ function createAppLLMServices(app2) {
         reply.raw.write(chunk);
         process.stdout.write(chunk);
       });
+      if (result instanceof Error) {
+        reply.raw.write("Error: codegeex接口请求失败 went wrong\n");
+        writeLog("codegeex 请求LLM接口失败 :" + result.message);
+      }
       reply.raw.end();
     } catch (error) {
       console.error("Error:", error);
