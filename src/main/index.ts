@@ -55,10 +55,10 @@ function createWindow()
   {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
-  // mainWindow.on('minimize', (event) => {
-  //   event.preventDefault()
-  //   mainWindow?.hide()
-  // })
+  mainWindow.on('minimize', (event) => {
+    event.preventDefault()
+    mainWindow?.hide()
+  })
 
   // 创建系统托盘图标
   tray = new Tray(iconPath);

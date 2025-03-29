@@ -14,7 +14,6 @@ const config: ForgeConfig = {
     ignore: ['./.git', 'test_ws', 'src', 'resources', 'outputLog', 'img', 'build', 'dist']
   },
   rebuildConfig: {},
-  outDir: 'forge_out_dist',
   makers: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',

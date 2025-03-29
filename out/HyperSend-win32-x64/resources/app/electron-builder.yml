@@ -1,0 +1,91 @@
+appId: com.superwindcloud.hypersend
+productName: hypersend
+
+
+directories:
+  output: dist
+  buildResources: build
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.npmrc,pnpm-lock.yaml}'
+  - '!{ tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - '!forge_make'
+  - '!.git'
+  - '!dist'
+  - '!outputLog'
+  - '!img'
+  - '!test_ws'
+
+asar: true
+
+asarUnpack:
+  - resources/**
+  - public/**
+  - esearch/**
+
+win:
+  icon :   build/sky3.ico
+  target: nsis
+  defaultArch: x64
+  executableName: HyperSend
+  publisherName: Superwindcloud
+  legalTrademarks: Superwindcloud
+
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName:  HyperSend
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: false
+  createStartMenuShortcut: true
+  installerIcon: build/sky3.ico
+  uninstallerIcon: build/victory/icons/icon.ico
+  installerHeaderIcon: build/sky3.ico
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+msi:
+  additionalWixArgs: [] # 额外的 Wix 参数
+  artifactName: ${name}-${version}-setup.${ext} # 安装包名称
+  createDesktopShortcut: always # 是否创建桌面快捷方式
+  createStartMenuShortcut: true # 是否创建开始菜单快捷方式
+  menuCategory: false # 是否在开始菜单中创建子目录
+  oneClick: false # 是否启用一键安装
+  perMachine: false # 是否为所有用户安装
+  publish: null # 发布配置
+  runAfterFinish: true # 安装完成后是否运行应用程序
+  shortcutName: ${productName} # 快捷方式名称
+  upgradeCode: null # 升级代码
+  warningsAsErrors: true # 是否将警告视为错误
+
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+  identity: null
+  hardenedRuntime: false
+  gatekeeperAssess: false
+dmg:
+  artifactName: ${name}-${version}.${ext}
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: electronjs.org
+  category: Utility
+appImage:
+  artifactName: ${name}-${version}.${ext}
+npmRebuild: false
+publish:
+  provider: generic
+  url: https://example.com/auto-updates
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/

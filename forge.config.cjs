@@ -3,42 +3,40 @@ const icon = path.resolve(__dirname, 'build/icon.ico')
 
 const config = {
   packagerConfig: {
-    asar: false,
+    asar: true ,
     appVersion: '7.7.7',
     executableName: 'HyperSend',
     prune: true,
     name: 'HyperSend',
     icon: icon,
+    dir: path.resolve(__dirname, 'dist'),
     ignore: [
-      '/!node_modules',
+      'node_modules/onnxruntime-node/bin/napi-v3/darwin',
+      'node_modules/onnxruntime-node/bin/napi-v3/linux',
+      '!node_modules/openai',
       '/.git',
       '/.vscode',
       '/test_ws',
       '/!esearch',
+      /^\/out/,
       '/!public',
-      '/forge_out_dist',
-      '/src',
-      '/.env',
-      '/.env.yarn',
+      '/!package.json',
+      '/package-lock.json',
+      '/yarn.lock',
+      '/pnpm-lock.yaml',
+      /^\/.env$/,
+      '.env.yarn',
       '/resources',
       '/outputLog',
       '/img',
-      '!electron_vite_out/',
-      '/out', // electron_forge 如果不加/会匹配所有包含out的目录,一定要手动显示指定不排除的构建目录
-      '/build',
-      '/dist',
+      '/image.png',
+      /^\/build/,
       /^\/src/,
       /(.eslintrc.json)|(.gitignore)|(electron.vite.config.ts)|(forge.config.cjs)|(tsconfig.*)/
     ]
   },
-  outDir: 'forge_out_dist',
-  plugins: [
-    {
-      name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {},
-      platforms: ['win32']
-    }
-  ],
+  outDir  : "A:/test_forge",
+  rebuildConfig: {},
   makers: [
     {
       name: '@electron-forge/maker-wix',
@@ -56,7 +54,8 @@ const config = {
         name: 'HyperSend',
         programFilesFolderName: 'HyperSend',
         shortName: 'HyperSend',
-        version: '7.7.7'
+        version: '7.7.7',
+        includeLocale: false
       }
     },
     {

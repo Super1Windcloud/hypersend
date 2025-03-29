@@ -11,7 +11,7 @@ export default defineConfig({
       }
     },
     build: {
-      outDir: 'electron_vite_out/main'
+      outDir: 'dist/main'
     }
   },
   preload: {
@@ -23,7 +23,7 @@ export default defineConfig({
       }
     },
     build: {
-      outDir: 'electron_vite_out/preload'
+      outDir: 'dist/preload'
 
     }
   },
@@ -36,7 +36,7 @@ export default defineConfig({
     },
     plugins: [react()]
     , build: {
-      outDir: 'electron_vite_out/renderer'
+      outDir: 'dist/renderer'
     }
   }
 
