@@ -10,25 +10,30 @@ const config = {
     name: 'HyperSend',
     icon: icon,
     ignore: [
+      '/node_modules',
       './.git',
-      'test_ws',
-      'src',
-      'resources',
-      'outputLog',
-      'img',
-      'build',
-      'dist',
-      'out',
+      '/test_ws',
+      '/src',
+      '/resources',
+      '/outputLog',
+      '/img',
+      '!electron_vite_out/',
+      '/out', // electron_forge 如果不加/会匹配所有包含out的目录,一定要手动显示指定不排除的构建目录
+      '/build',
+      '/dist',
       /^\/src/,
       /(.eslintrc.json)|(.gitignore)|(electron.vite.config.ts)|(forge.config.cjs)|(tsconfig.*)/
     ]
   },
   outDir: 'forge_out_dist',
-  makers: [
+  plugins: [
     {
       name: '@electron-forge/plugin-auto-unpack-natives',
-      config: {}
-    },
+      config: {},
+      platforms: ['win32']
+    }
+  ],
+  makers: [
     {
       name: '@electron-forge/maker-wix',
       platforms: ['win32'],
@@ -50,10 +55,7 @@ const config = {
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['win32'],
-      config: {
-        icon: icon
-      }
+      platforms: ['win32']
     }
   ]
 }

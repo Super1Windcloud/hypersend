@@ -10,15 +10,15 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "esnext",
     "paths": {
       "@/*": [
         "src/*"
       ]
-    }
-    ,"esModuleInterop" :true
+    },
+    "esModuleInterop": true
   },
   "exclude": [
     "test_ws"
   ]
 }
-// The "exclude" property is added to exclude the "node_modules" directory from the compilation process.

@@ -11947,7 +11947,7 @@ function genStyleUtils(config) {
   };
 }
 const PresetColors = ["blue", "purple", "cyan", "green", "magenta", "pink", "red", "orange", "yellow", "volcano", "geekblue", "lime", "gold"];
-const version$1 = "5.24.1";
+const version$1 = "5.24.5";
 function isStableColor(color) {
   return color >= 0 && color <= 255;
 }
@@ -12412,8 +12412,9 @@ const {
   },
   getResetStyles: (token2, config) => {
     var _a;
-    return [{
-      "&": genLinkStyle$1(token2)
+    const linkStyle = genLinkStyle$1(token2);
+    return [linkStyle, {
+      "&": linkStyle
     }, genIconStyle((_a = config === null || config === void 0 ? void 0 : config.prefix.iconPrefixCls) !== null && _a !== void 0 ? _a : defaultIconPrefixCls)];
   },
   getCommonStyle: genCommonStyle,
@@ -15377,7 +15378,7 @@ const useSize = (customSize) => {
     if (typeof customSize === "string") {
       return customSize !== null && customSize !== void 0 ? customSize : size;
     }
-    if (customSize instanceof Function) {
+    if (typeof customSize === "function") {
       return customSize(size);
     }
     return size;
@@ -23223,7 +23224,6 @@ const genNoticeStyle = (token2) => {
       position: "absolute",
       display: "block",
       appearance: "none",
-      WebkitAppearance: "none",
       inlineSize: `calc(100% - ${unit$1(borderRadiusLG)} * 2)`,
       left: {
         _skip_check_: true,
@@ -23748,14 +23748,6 @@ var SearchOutlined = function SearchOutlined2(props, ref) {
   }));
 };
 var RefIcon$9 = /* @__PURE__ */ reactExports.forwardRef(SearchOutlined);
-var BarsOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z" } }] }, "name": "bars", "theme": "outlined" };
-var BarsOutlined = function BarsOutlined2(props, ref) {
-  return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
-    ref,
-    icon: BarsOutlined$1
-  }));
-};
-var RefIcon$8 = /* @__PURE__ */ reactExports.forwardRef(BarsOutlined);
 var LeftOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 000 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z" } }] }, "name": "left", "theme": "outlined" };
 var LeftOutlined = function LeftOutlined2(props, ref) {
   return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
@@ -23763,7 +23755,15 @@ var LeftOutlined = function LeftOutlined2(props, ref) {
     icon: LeftOutlined$1
   }));
 };
-var RefIcon$7 = /* @__PURE__ */ reactExports.forwardRef(LeftOutlined);
+var RefIcon$8 = /* @__PURE__ */ reactExports.forwardRef(LeftOutlined);
+var BarsOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "0 0 1024 1024", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z" } }] }, "name": "bars", "theme": "outlined" };
+var BarsOutlined = function BarsOutlined2(props, ref) {
+  return /* @__PURE__ */ reactExports.createElement(Icon$1, _extends({}, props, {
+    ref,
+    icon: BarsOutlined$1
+  }));
+};
+var RefIcon$7 = /* @__PURE__ */ reactExports.forwardRef(BarsOutlined);
 const LayoutContext = /* @__PURE__ */ reactExports.createContext({
   siderHook: {
     addSider: () => null,
@@ -23923,6 +23923,9 @@ const genSiderStyle = (token2) => {
           width: "auto"
         }
       },
+      [`&-zero-width ${componentCls}-children`]: {
+        overflow: "hidden"
+      },
       [`${componentCls}-trigger`]: {
         position: "fixed",
         bottom: 0,
@@ -23935,40 +23938,35 @@ const genSiderStyle = (token2) => {
         cursor: "pointer",
         transition: `all ${motionDurationMid}`
       },
-      [`${componentCls}-zero-width`]: {
-        "> *": {
-          overflow: "hidden"
-        },
-        "&-trigger": {
+      [`${componentCls}-zero-width-trigger`]: {
+        position: "absolute",
+        top: headerHeight,
+        insetInlineEnd: token2.calc(zeroTriggerWidth).mul(-1).equal(),
+        zIndex: 1,
+        width: zeroTriggerWidth,
+        height: zeroTriggerHeight,
+        color: triggerColor,
+        fontSize: token2.fontSizeXL,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: siderBg,
+        borderRadius: `0 ${unit$1(borderRadiusLG)} ${unit$1(borderRadiusLG)} 0`,
+        cursor: "pointer",
+        transition: `background ${motionDurationSlow} ease`,
+        "&::after": {
           position: "absolute",
-          top: headerHeight,
-          insetInlineEnd: token2.calc(zeroTriggerWidth).mul(-1).equal(),
-          zIndex: 1,
-          width: zeroTriggerWidth,
-          height: zeroTriggerHeight,
-          color: triggerColor,
-          fontSize: token2.fontSizeXL,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: siderBg,
-          borderRadius: `0 ${unit$1(borderRadiusLG)} ${unit$1(borderRadiusLG)} 0`,
-          cursor: "pointer",
-          transition: `background ${motionDurationSlow} ease`,
-          "&::after": {
-            position: "absolute",
-            inset: 0,
-            background: "transparent",
-            transition: `all ${motionDurationSlow}`,
-            content: '""'
-          },
-          "&:hover::after": {
-            background: `rgba(255, 255, 255, 0.2)`
-          },
-          "&-right": {
-            insetInlineStart: token2.calc(zeroTriggerWidth).mul(-1).equal(),
-            borderRadius: `${unit$1(borderRadiusLG)} 0 0 ${unit$1(borderRadiusLG)}`
-          }
+          inset: 0,
+          background: "transparent",
+          transition: `all ${motionDurationSlow}`,
+          content: '""'
+        },
+        "&:hover::after": {
+          background: `rgba(255, 255, 255, 0.2)`
+        },
+        "&-right": {
+          insetInlineStart: token2.calc(zeroTriggerWidth).mul(-1).equal(),
+          borderRadius: `${unit$1(borderRadiusLG)} 0 0 ${unit$1(borderRadiusLG)}`
         }
       },
       // Light
@@ -24108,11 +24106,11 @@ const Sider = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     onClick: toggle,
     className: classNames(`${prefixCls}-zero-width-trigger`, `${prefixCls}-zero-width-trigger-${reverseArrow ? "right" : "left"}`),
     style: zeroWidthTriggerStyle
-  }, trigger || /* @__PURE__ */ reactExports.createElement(RefIcon$8, null)) : null;
+  }, trigger || /* @__PURE__ */ reactExports.createElement(RefIcon$7, null)) : null;
   const reverseIcon = direction === "rtl" === !reverseArrow;
   const iconObj = {
-    expanded: reverseIcon ? /* @__PURE__ */ reactExports.createElement(RefIcon$a, null) : /* @__PURE__ */ reactExports.createElement(RefIcon$7, null),
-    collapsed: reverseIcon ? /* @__PURE__ */ reactExports.createElement(RefIcon$7, null) : /* @__PURE__ */ reactExports.createElement(RefIcon$a, null)
+    expanded: reverseIcon ? /* @__PURE__ */ reactExports.createElement(RefIcon$a, null) : /* @__PURE__ */ reactExports.createElement(RefIcon$8, null),
+    collapsed: reverseIcon ? /* @__PURE__ */ reactExports.createElement(RefIcon$8, null) : /* @__PURE__ */ reactExports.createElement(RefIcon$a, null)
   };
   const status = collapsed ? "collapsed" : "expanded";
   const defaultTrigger = iconObj[status];
@@ -24174,12 +24172,21 @@ const initComponentToken = (token2) => {
     controlOutline,
     colorErrorOutline,
     colorWarningOutline,
-    colorBgContainer
+    colorBgContainer,
+    inputFontSize,
+    inputFontSizeLG,
+    inputFontSizeSM
   } = token2;
+  const mergedFontSize = inputFontSize || fontSize;
+  const mergedFontSizeSM = inputFontSizeSM || mergedFontSize;
+  const mergedFontSizeLG = inputFontSizeLG || fontSizeLG;
+  const paddingBlock = Math.round((controlHeight - mergedFontSize * lineHeight) / 2 * 10) / 10 - lineWidth;
+  const paddingBlockSM = Math.round((controlHeightSM - mergedFontSizeSM * lineHeight) / 2 * 10) / 10 - lineWidth;
+  const paddingBlockLG = Math.ceil((controlHeightLG - mergedFontSizeLG * lineHeightLG) / 2 * 10) / 10 - lineWidth;
   return {
-    paddingBlock: Math.max(Math.round((controlHeight - fontSize * lineHeight) / 2 * 10) / 10 - lineWidth, 0),
-    paddingBlockSM: Math.max(Math.round((controlHeightSM - fontSize * lineHeight) / 2 * 10) / 10 - lineWidth, 0),
-    paddingBlockLG: Math.ceil((controlHeightLG - fontSizeLG * lineHeightLG) / 2 * 10) / 10 - lineWidth,
+    paddingBlock: Math.max(paddingBlock, 0),
+    paddingBlockSM: Math.max(paddingBlockSM, 0),
+    paddingBlockLG: Math.max(paddingBlockLG, 0),
     paddingInline: paddingSM - lineWidth,
     paddingInlineSM: controlPaddingHorizontalSM - lineWidth,
     paddingInlineLG: controlPaddingHorizontal - lineWidth,
@@ -24191,9 +24198,9 @@ const initComponentToken = (token2) => {
     warningActiveShadow: `0 0 0 ${controlOutlineWidth}px ${colorWarningOutline}`,
     hoverBg: colorBgContainer,
     activeBg: colorBgContainer,
-    inputFontSize: fontSize,
-    inputFontSizeLG: fontSizeLG,
-    inputFontSizeSM: fontSize
+    inputFontSize: mergedFontSize,
+    inputFontSizeLG: mergedFontSizeLG,
+    inputFontSizeSM: mergedFontSizeSM
   };
 };
 const genHoverStyle = (token2) => ({
@@ -24331,23 +24338,26 @@ const genBorderlessStyle = (token2, extraStyles) => {
     }, extraStyles)
   };
 };
-const genBaseFilledStyle = (token2, options) => ({
-  background: options.bg,
-  borderWidth: token2.lineWidth,
-  borderStyle: token2.lineType,
-  borderColor: "transparent",
-  "input&, & input, textarea&, & textarea": {
-    color: options === null || options === void 0 ? void 0 : options.inputColor
-  },
-  "&:hover": {
-    background: options.hoverBg
-  },
-  "&:focus, &:focus-within": {
-    outline: 0,
-    borderColor: options.activeBorderColor,
-    backgroundColor: token2.activeBg
-  }
-});
+const genBaseFilledStyle = (token2, options) => {
+  var _a;
+  return {
+    background: options.bg,
+    borderWidth: token2.lineWidth,
+    borderStyle: token2.lineType,
+    borderColor: "transparent",
+    "input&, & input, textarea&, & textarea": {
+      color: (_a = options === null || options === void 0 ? void 0 : options.inputColor) !== null && _a !== void 0 ? _a : "unset"
+    },
+    "&:hover": {
+      background: options.hoverBg
+    },
+    "&:focus, &:focus-within": {
+      outline: 0,
+      borderColor: options.activeBorderColor,
+      backgroundColor: token2.activeBg
+    }
+  };
+};
 const genFilledStatusStyle = (token2, options) => ({
   [`&${token2.componentCls}-status-${options.status}:not(${token2.componentCls}-disabled)`]: Object.assign(Object.assign({}, genBaseFilledStyle(token2, options)), {
     [`${token2.componentCls}-prefix, ${token2.componentCls}-suffix`]: {
@@ -24432,16 +24442,16 @@ const genFilledGroupStyle = (token2) => ({
 });
 const genBaseUnderlinedStyle = (token2, options) => ({
   background: token2.colorBgContainer,
-  borderWidth: `0 0 ${unit$1(token2.lineWidth)} 0`,
-  borderStyle: `none none ${token2.lineType} none`,
-  borderColor: options.borderColor,
+  borderWidth: `${unit$1(token2.lineWidth)} 0`,
+  borderStyle: `${token2.lineType} none`,
+  borderColor: `transparent transparent ${options.borderColor} transparent`,
   borderRadius: 0,
   "&:hover": {
-    borderColor: options.hoverBorderColor,
+    borderColor: `transparent transparent ${options.borderColor} transparent`,
     backgroundColor: token2.hoverBg
   },
   "&:focus, &:focus-within": {
-    borderColor: options.activeBorderColor,
+    borderColor: `transparent transparent ${options.borderColor} transparent`,
     outline: 0,
     backgroundColor: token2.activeBg
   }
@@ -24453,7 +24463,7 @@ const genUnderlinedStatusStyle = (token2, options) => ({
     }
   }),
   [`&${token2.componentCls}-status-${options.status}${token2.componentCls}-disabled`]: {
-    borderColor: options.borderColor
+    borderColor: `transparent transparent ${options.borderColor} transparent`
   }
 });
 const genUnderlinedStyle = (token2, extraStyles) => ({
@@ -24469,7 +24479,7 @@ const genUnderlinedStyle = (token2, extraStyles) => ({
       boxShadow: "none",
       cursor: "not-allowed",
       "&:hover": {
-        borderColor: token2.colorBorder
+        borderColor: `transparent transparent ${token2.colorBorder} transparent`
       }
     },
     "input[disabled], textarea[disabled]": {
@@ -24536,17 +24546,6 @@ const genBasicInputStyle = (token2) => Object.assign(Object.assign({
   borderRadius: token2.borderRadius,
   transition: `all ${token2.motionDurationMid}`
 }, genPlaceholderStyle(token2.colorTextPlaceholder)), {
-  // Reset height for `textarea`s
-  "textarea&": {
-    maxWidth: "100%",
-    // prevent textarea resize from coming out of its container
-    height: "auto",
-    minHeight: token2.controlHeight,
-    lineHeight: token2.lineHeight,
-    verticalAlign: "bottom",
-    transition: `all ${token2.motionDurationSlow}, height 0s`,
-    resize: "vertical"
-  },
   // Size
   "&-lg": Object.assign({}, genInputLargeStyle(token2)),
   "&-sm": Object.assign({}, genInputSmallStyle(token2)),
@@ -24811,7 +24810,7 @@ const genInputStyle = (token2) => {
         }
       },
       '&[type="search"]::-webkit-search-cancel-button, &[type="search"]::-webkit-search-decoration': {
-        "-webkit-appearance": "none"
+        appearance: "none"
       }
     })
   };
@@ -25308,6 +25307,7 @@ var BaseInput = /* @__PURE__ */ React.forwardRef(function(props, ref) {
       var iconNode = _typeof(allowClear) === "object" && allowClear !== null && allowClear !== void 0 && allowClear.clearIcon ? allowClear.clearIcon : "✖";
       clearIcon = /* @__PURE__ */ React.createElement("button", {
         type: "button",
+        tabIndex: -1,
         onClick: function onClick(event) {
           handleReset === null || handleReset === void 0 || handleReset(event);
           onClear === null || onClear === void 0 || onClear();
@@ -26000,6 +26000,20 @@ var __rest$6 = function(s, e) {
 function strToArr(str) {
   return (str || "").split("");
 }
+const Separator = (props) => {
+  const {
+    index: index2,
+    prefixCls,
+    separator
+  } = props;
+  const separatorNode = typeof separator === "function" ? separator(index2) : separator;
+  if (!separatorNode) {
+    return null;
+  }
+  return /* @__PURE__ */ reactExports.createElement("span", {
+    className: `${prefixCls}-separator`
+  }, separatorNode);
+};
 const OTP = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   const {
     prefixCls: customizePrefixCls,
@@ -26054,7 +26068,7 @@ const OTP = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     nativeElement: containerRef.current
   }));
   const internalFormatter = (txt) => formatter ? formatter(txt) : txt;
-  const [valueCells, setValueCells] = reactExports.useState(strToArr(internalFormatter(defaultValue || "")));
+  const [valueCells, setValueCells] = reactExports.useState(() => strToArr(internalFormatter(defaultValue || "")));
   reactExports.useEffect(() => {
     if (value !== void 0) {
       setValueCells(strToArr(value));
@@ -26118,12 +26132,6 @@ const OTP = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     type: type4,
     inputMode
   };
-  const renderSeparator = (index2) => {
-    const result = typeof separator === "function" ? separator(index2) : separator;
-    return result ? /* @__PURE__ */ reactExports.createElement("span", {
-      className: `${prefixCls}-separator`
-    }, result) : null;
-  };
   return wrapCSSVar(/* @__PURE__ */ reactExports.createElement("div", Object.assign({}, domAttrs, {
     ref: containerRef,
     className: classNames(prefixCls, {
@@ -26152,7 +26160,11 @@ const OTP = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
       value: singleValue,
       onActiveChange: onInputActiveChange,
       autoFocus: index2 === 0 && autoFocus
-    }, inputSharedProps)), separator && index2 < length2 - 1 && renderSeparator(index2));
+    }, inputSharedProps)), index2 < length2 - 1 && /* @__PURE__ */ reactExports.createElement(Separator, {
+      separator,
+      index: index2,
+      prefixCls
+    }));
   }))));
 });
 var EyeInvisibleOutlined$1 = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M942.2 486.2Q889.47 375.11 816.7 305l-50.88 50.88C807.31 395.53 843.45 447.4 874.7 512 791.5 684.2 673.4 766 512 766q-72.67 0-133.87-22.38L323 798.75Q408 838 512 838q288.3 0 430.2-300.3a60.29 60.29 0 000-51.5zm-63.57-320.64L836 122.88a8 8 0 00-11.32 0L715.31 232.2Q624.86 186 512 186q-288.3 0-430.2 300.3a60.3 60.3 0 000 51.5q56.69 119.4 136.5 191.41L112.48 835a8 8 0 000 11.31L155.17 889a8 8 0 0011.31 0l712.15-712.12a8 8 0 000-11.32zM149.3 512C232.6 339.8 350.7 258 512 258c54.54 0 104.13 9.36 149.12 28.39l-70.3 70.3a176 176 0 00-238.13 238.13l-83.42 83.42C223.1 637.49 183.3 582.28 149.3 512zm246.7 0a112.11 112.11 0 01146.2-106.69L401.31 546.2A112 112 0 01396 512z" } }, { "tag": "path", "attrs": { "d": "M508 624c-3.46 0-6.87-.16-10.25-.47l-52.82 52.82a176.09 176.09 0 00227.42-227.42l-52.82 52.82c.31 3.38.47 6.79.47 10.25a111.94 111.94 0 01-112 112z" } }] }, "name": "eye-invisible", "theme": "outlined" };
@@ -26741,6 +26753,24 @@ const genTextAreaStyle = (token2) => {
   } = token2;
   const textareaPrefixCls = `${componentCls}-textarea`;
   return {
+    // Raw Textarea
+    [`textarea${componentCls}`]: {
+      maxWidth: "100%",
+      // prevent textarea resize from coming out of its container
+      height: "auto",
+      minHeight: token2.controlHeight,
+      lineHeight: token2.lineHeight,
+      verticalAlign: "bottom",
+      transition: `all ${token2.motionDurationSlow}`,
+      resize: "vertical",
+      [`&${componentCls}-mouse-active`]: {
+        transition: `all ${token2.motionDurationSlow}, height 0s, width 0s`
+      }
+    },
+    // Wrapper for resize
+    [`${componentCls}-textarea-affix-wrapper-resize-dirty`]: {
+      width: "auto"
+    },
     [textareaPrefixCls]: {
       position: "relative",
       "&-show-count": {
@@ -26838,8 +26868,11 @@ const TextArea$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     className,
     style: style2,
     styles,
-    variant: customVariant
-  } = props, rest = __rest$3(props, ["prefixCls", "bordered", "size", "disabled", "status", "allowClear", "classNames", "rootClassName", "className", "style", "styles", "variant"]);
+    variant: customVariant,
+    showCount,
+    onMouseDown,
+    onResize: onResize2
+  } = props, rest = __rest$3(props, ["prefixCls", "bordered", "size", "disabled", "status", "allowClear", "classNames", "rootClassName", "className", "style", "styles", "variant", "showCount", "onMouseDown", "onResize"]);
   const {
     getPrefixCls,
     direction,
@@ -26887,6 +26920,27 @@ const TextArea$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
   });
   const [variant, enableVariantCls] = useVariant("textArea", customVariant, bordered);
   const mergedAllowClear = getAllowClear(allowClear !== null && allowClear !== void 0 ? allowClear : contextAllowClear);
+  const [isMouseDown, setIsMouseDown] = reactExports.useState(false);
+  const [resizeDirty, setResizeDirty] = reactExports.useState(false);
+  const onInternalMouseDown = (e) => {
+    setIsMouseDown(true);
+    onMouseDown === null || onMouseDown === void 0 ? void 0 : onMouseDown(e);
+    const onMouseUp = () => {
+      setIsMouseDown(false);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+    document.addEventListener("mouseup", onMouseUp);
+  };
+  const onInternalResize = (size) => {
+    var _a2, _b;
+    onResize2 === null || onResize2 === void 0 ? void 0 : onResize2(size);
+    if (isMouseDown && typeof getComputedStyle === "function") {
+      const ele = (_b = (_a2 = innerRef.current) === null || _a2 === void 0 ? void 0 : _a2.nativeElement) === null || _b === void 0 ? void 0 : _b.querySelector("textarea");
+      if (ele && getComputedStyle(ele).resize === "both") {
+        setResizeDirty(true);
+      }
+    }
+  };
   return wrapSharedCSSVar(wrapCSSVar(/* @__PURE__ */ reactExports.createElement(TextArea$2, Object.assign({
     autoComplete: contextAutoComplete
   }, rest, {
@@ -26894,12 +26948,21 @@ const TextArea$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
     styles: Object.assign(Object.assign({}, contextStyles), styles),
     disabled: mergedDisabled,
     allowClear: mergedAllowClear,
-    className: classNames(cssVarCls, rootCls, className, rootClassName, compactItemClassnames, contextClassName),
+    className: classNames(
+      cssVarCls,
+      rootCls,
+      className,
+      rootClassName,
+      compactItemClassnames,
+      contextClassName,
+      // Only for wrapper
+      resizeDirty && `${prefixCls}-textarea-affix-wrapper-resize-dirty`
+    ),
     classNames: Object.assign(Object.assign(Object.assign({}, classes), contextClassNames), {
       textarea: classNames({
         [`${prefixCls}-sm`]: mergedSize === "small",
         [`${prefixCls}-lg`]: mergedSize === "large"
-      }, hashId, classes === null || classes === void 0 ? void 0 : classes.textarea, contextClassNames.textarea),
+      }, hashId, classes === null || classes === void 0 ? void 0 : classes.textarea, contextClassNames.textarea, isMouseDown && `${prefixCls}-mouse-active`),
       variant: classNames({
         [`${prefixCls}-${variant}`]: enableVariantCls
       }, getStatusClassNames(prefixCls, mergedStatus)),
@@ -26907,14 +26970,17 @@ const TextArea$1 = /* @__PURE__ */ reactExports.forwardRef((props, ref) => {
         [`${prefixCls}-affix-wrapper-rtl`]: direction === "rtl",
         [`${prefixCls}-affix-wrapper-sm`]: mergedSize === "small",
         [`${prefixCls}-affix-wrapper-lg`]: mergedSize === "large",
-        [`${prefixCls}-textarea-show-count`]: props.showCount || ((_a = props.count) === null || _a === void 0 ? void 0 : _a.show)
+        [`${prefixCls}-textarea-show-count`]: showCount || ((_a = props.count) === null || _a === void 0 ? void 0 : _a.show)
       }, hashId)
     }),
     prefixCls,
     suffix: hasFeedback && /* @__PURE__ */ reactExports.createElement("span", {
       className: `${prefixCls}-textarea-suffix`
     }, feedbackIcon),
-    ref: innerRef
+    showCount,
+    ref: innerRef,
+    onResize: onInternalResize,
+    onMouseDown: onInternalMouseDown
   }))));
 });
 const Input = Input$1;
@@ -28855,7 +28921,7 @@ var unitlessKeys$1 = {
   strokeWidth: 1
 };
 var define_process_env_default = {};
-var f = "undefined" != typeof process && void 0 !== define_process_env_default && (define_process_env_default.REACT_APP_SC_ATTR || define_process_env_default.SC_ATTR) || "data-styled", m = "active", y = "data-styled-version", v = "6.1.15", g = "/*!sc*/\n", S = "undefined" != typeof window && "HTMLElement" in window, w = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== define_process_env_default && void 0 !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY && "" !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY ? "false" !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY && define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== define_process_env_default && void 0 !== define_process_env_default.SC_DISABLE_SPEEDY && "" !== define_process_env_default.SC_DISABLE_SPEEDY ? "false" !== define_process_env_default.SC_DISABLE_SPEEDY && define_process_env_default.SC_DISABLE_SPEEDY : false), _ = Object.freeze([]), C = Object.freeze({});
+var f = "undefined" != typeof process && void 0 !== define_process_env_default && (define_process_env_default.REACT_APP_SC_ATTR || define_process_env_default.SC_ATTR) || "data-styled", m = "active", y = "data-styled-version", v = "6.1.16", g = "/*!sc*/\n", S = "undefined" != typeof window && "HTMLElement" in window, w = Boolean("boolean" == typeof SC_DISABLE_SPEEDY ? SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== define_process_env_default && void 0 !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY && "" !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY ? "false" !== define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY && define_process_env_default.REACT_APP_SC_DISABLE_SPEEDY : "undefined" != typeof process && void 0 !== define_process_env_default && void 0 !== define_process_env_default.SC_DISABLE_SPEEDY && "" !== define_process_env_default.SC_DISABLE_SPEEDY ? "false" !== define_process_env_default.SC_DISABLE_SPEEDY && define_process_env_default.SC_DISABLE_SPEEDY : false), _ = Object.freeze([]), C = Object.freeze({});
 function I(e2, t2, n2) {
   return void 0 === n2 && (n2 = C), e2.theme !== n2.theme && e2.theme || t2 || n2.theme;
 }

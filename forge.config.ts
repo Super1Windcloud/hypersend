@@ -1,7 +1,8 @@
 import type { ForgeConfig } from '@electron-forge/shared-types';
-const path = require('path')
-const icon = path.resolve(__dirname, 'build/icon.ico')
-
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename)
 const config: ForgeConfig = {
   packagerConfig: {
     asar: true,
@@ -9,7 +10,7 @@ const config: ForgeConfig = {
     executableName: 'HyperSend',
     prune: true,
     name: 'HyperSend',
-    icon:  icon ,
+    icon: path.join(__dirname, 'build/icon.ico'),
     ignore: ['./.git', 'test_ws', 'src', 'resources', 'outputLog', 'img', 'build', 'dist']
   },
   rebuildConfig: {},
