@@ -3,17 +3,23 @@ const icon = path.resolve(__dirname, 'build/icon.ico')
 
 const config = {
   packagerConfig: {
-    asar: true,
+    asar: false,
     appVersion: '7.7.7',
     executableName: 'HyperSend',
     prune: true,
     name: 'HyperSend',
     icon: icon,
     ignore: [
-      '/node_modules',
-      './.git',
+      '/!node_modules',
+      '/.git',
+      '/.vscode',
       '/test_ws',
+      '/!esearch',
+      '/!public',
+      '/forge_out_dist',
       '/src',
+      '/.env',
+      '/.env.yarn',
       '/resources',
       '/outputLog',
       '/img',
