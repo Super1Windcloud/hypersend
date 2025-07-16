@@ -11,7 +11,7 @@ const config: ForgeConfig = {
     prune: true,
     name: 'HyperSend',
     icon: path.join(__dirname, 'build/icon.ico'),
-    ignore: ['./.git', 'test_ws', 'src', 'resources', 'outputLog', 'img', 'build', 'dist']
+    ignore: ['./.git', 'test_ws', 'src', 'resources', 'outputLog', 'img', 'build',  ]
   },
   rebuildConfig: {},
   makers: [

@@ -18,7 +18,8 @@ let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
 import dotenv from 'dotenv'
 import { createWriteStream } from 'fs'
 import { envPrint } from '@/utils/api'
-
+const __public = path.join(process.cwd(), 'public');
+console.log("public:", __public);
 function initEnv()
 {
   const writeStream = createWriteStream('./log.txt');
@@ -46,6 +47,8 @@ async function createFastifyApp()
   } else
   {
     rootPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public/dist-vite')
+    rootPath = path.join(process.cwd(), 'public/dist-vite');
+
     writeLog('\n' + 'rootPath:' + rootPath);
   };
   app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件

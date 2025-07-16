@@ -63,6 +63,9 @@ export async function getPaddleOcrResult(img ? : loadImgType): Promise<string | 
     det = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_det.onnx');
     rec = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_rec.onnx');
     key = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt');
+    det = process.cwd() + "\\esearch\\ppocr_det.onnx";
+    rec = process.cwd() + "\\esearch\\ppocr_rec.onnx";
+    key = process.cwd() + "\\esearch\\ppocr_keys_v1.txt";
   }
   let ocr;
   writeLog(  '模型路径\n'+det+'\n'+rec+'\n'+key+'\n' );

@@ -1,0 +1,6 @@
+nodeLinker  : hoisted
+dangerouslyAllowAllBuilds: true
+
+
+packages:
+  - 'packages/*'

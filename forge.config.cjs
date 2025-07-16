@@ -3,7 +3,7 @@ const icon = path.resolve(__dirname, 'build/icon.ico')
 
 const config = {
   packagerConfig: {
-    asar: true ,
+    asar: false ,
     appVersion: '7.7.7',
     executableName: 'HyperSend',
     prune: true,
@@ -46,7 +46,7 @@ const config = {
         features: true,
         manufacturer: 'superwindcloud',
         ui: {
-          chooseDirectory: true // 允许用户选择安装目录
+          chooseDirectory: true
         },
         icon: icon,
         description: 'HyperSend by Superwindcloud',

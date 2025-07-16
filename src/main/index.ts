@@ -37,7 +37,7 @@ function createWindow()
     }
   })
   startListeningRenderer()
-  mainWindow.on('ready-to-show', () =>
+  mainWindow.once('ready-to-show', () =>
   {
     mainWindow?.show()
   })

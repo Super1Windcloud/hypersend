@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {  Layout } from 'antd'
 
 const { Header, Footer  } = Layout
@@ -21,6 +21,7 @@ const layoutStyle = {
 import InfoBox from '@renderer/components/HelpInfo'
 import SelectTransferType from './components/SelectTransferType'
 import ConnectToPeerNearbyDevices from './components/ConnectToPeerNearbyDevices'
+
 const App: React.FC = () => (
   <Layout style={layoutStyle}>
     <Header style={headerStyle}>

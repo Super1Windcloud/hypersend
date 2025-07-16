@@ -7,6 +7,10 @@ dist
 
 build
 
+
+**/node_modules/**
+**/dist/**
+**/build/**
 forge_make
 dist_forge
 
