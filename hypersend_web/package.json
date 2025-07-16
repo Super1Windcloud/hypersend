@@ -1,0 +1,69 @@
+{
+  "name": "hypersend",
+  "private": true,
+  "version": "1.0.0",
+  "author": "superwindcloud",
+  "homepage": "https://gitee.com/superwindcloud",
+  "packageManager": "pnpm@10.6.2",
+  "license": "MIT",
+  "browserslist": [
+    "last 2 versions",
+    "ie > 10"
+  ],
+  "type": "module",
+  "scripts": {
+    "fdev": "farm start",
+    "fbuild": "farm build",
+    "dev": "vite",
+    "build": "vite build",
+    "vpreview": "vite preview",
+    "sfc": "pnpm  run  --filter  parcel sfc ",
+    "vuesfc": "pnpm  run  --filter  vuesfc dev  "
+  },
+  "dependencies": {
+    "animate.css": "^4.1.1",
+    "dotenv": "^16.4.7",
+    "element-plus": "^2.9.5",
+    "glow-gradient-button-vue": "^7.9.5",
+    "md-editor-v3": "^5.3.2",
+    "openai": "^4.86.2",
+    "pinia": "^3.0.1",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "uuid": "^11.1.0",
+    "vue": "^3.5.13",
+    "vue-advanced-cropper": "^2.8.9"
+  },
+  "devDependencies": {
+    "@farmfe/cli": "^1.0.2",
+    "@farmfe/core": "^1.3.0",
+    "@types/node": "^22.13.9",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.2.0",
+    "vite-plugin-html": "^3.2.2",
+    "ws": "^8.18.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "core-js",
+      "vue-demi",
+      "@parcel/transformer-vue",
+      "parcel",
+      "@parcel/watcher",
+      "@swc/core",
+      "lmdb",
+      "esbuild",
+      "msgpackr-extract",
+      "@vitejs/plugin-react-swc",
+      "@farmfe/plugin-vue",
+      "@farmfe/core"
+    ],
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "@swc/core",
+      "esbuild",
+      "lmdb",
+      "msgpackr-extract"
+    ]
+  }
+}

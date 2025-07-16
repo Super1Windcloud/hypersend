@@ -8,6 +8,11 @@ dist
 build
 
 
+**/viteCache/**
+**/.parcel-cache/**
+**/farmBuild/**
+**/parcel/**
+**/out/**
 **/node_modules/**
 **/dist/**
 **/build/**
