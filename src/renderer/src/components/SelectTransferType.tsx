@@ -26,7 +26,7 @@ const NavItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  color:      lightpink ;
+  color: lightpink;
   cursor: pointer;
   padding: 5px;
   &:hover {
@@ -44,7 +44,15 @@ const Text = styled.span`
   font-size: 14px;
 `
 
-export const IconButton = ({ icon, text  , ClickEvent  } : {icon : string , text : string , ClickEvent : () => void}) => {
+export const IconButton = ({
+  icon,
+  text,
+  ClickEvent
+}: {
+  icon: string
+  text: string
+  ClickEvent: () => void
+}) => {
   return (
     <NavItem onClick={ClickEvent}>
       <Icon>{icon}</Icon>
@@ -53,34 +61,56 @@ export const IconButton = ({ icon, text  , ClickEvent  } : {icon : string , text
   )
 }
 
-const TransferIcons = () =>
-{
-
+const TransferIcons = () => {
   const [isModalOpen, setIsModalOpen] = useState([false, false])
-   const toggleModal = (idx: number, target: boolean) => {
-     setIsModalOpen((p) => {
-       p[idx] = target
-       return [...p]
-     })
-   }
+  const toggleModal = (idx: number, target: boolean) => {
+    setIsModalOpen((p) => {
+      p[idx] = target
+      return [...p]
+    })
+  }
   const invokeClipboard = async () => {
-     await window.electron.ipcRenderer.invoke('sendClipboard')
+    await window.electron.ipcRenderer.invoke('sendClipboard')
   }
   const openFolder = async () => {
     await window.electron.ipcRenderer.invoke('openFolder')
   }
-  const openFileExplorer = async () =>
-  {
+  const openFileExplorer = async () => {
     await window.electron.ipcRenderer.invoke('openFile')
   }
   return (
     <NavBar>
-      <TextInputModel isModalOpen ={ isModalOpen }  toggleModal = { toggleModal } > </TextInputModel>
-      <IconButton icon="📄" text="文件" ClickEvent={() => { openFileExplorer() }}  />
-      <IconButton icon="📁" text="文件夹"  ClickEvent = {() => { openFolder() }} />
-      <IconButton icon="📝" text="文本"  ClickEvent={ ()=> { toggleModal(0, true) }  }  />
-      <IconButton icon="📋" text="剪贴板"  ClickEvent = {() => {  invokeClipboard() }} />
-
+      <TextInputModel isModalOpen={isModalOpen} toggleModal={toggleModal}>
+        {' '}
+      </TextInputModel>
+      <IconButton
+        icon="📄"
+        text="文件"
+        ClickEvent={() => {
+          openFileExplorer()
+        }}
+      />
+      <IconButton
+        icon="📁"
+        text="文件夹"
+        ClickEvent={() => {
+          openFolder()
+        }}
+      />
+      <IconButton
+        icon="📝"
+        text="文本"
+        ClickEvent={() => {
+          toggleModal(0, true)
+        }}
+      />
+      <IconButton
+        icon="📋"
+        text="剪贴板"
+        ClickEvent={() => {
+          invokeClipboard()
+        }}
+      />
     </NavBar>
   )
 }

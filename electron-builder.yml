@@ -1,7 +1,6 @@
 appId: com.superwindcloud.hypersend
 productName: hypersend
 
-
 directories:
   output: dist
   buildResources: build
@@ -27,7 +26,7 @@ asarUnpack:
   - esearch/**
 
 win:
-  icon :   build/sky3.ico
+  icon: build/sky3.ico
   target: nsis
   defaultArch: x64
   executableName: HyperSend
@@ -36,7 +35,7 @@ win:
 
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
-  shortcutName:  HyperSend
+  shortcutName: HyperSend
   uninstallDisplayName: ${productName}
   createDesktopShortcut: false
   createStartMenuShortcut: true

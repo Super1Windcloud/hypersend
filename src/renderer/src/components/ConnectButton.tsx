@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from 'react'
 import styled from 'styled-components'
-import {    GradientButton , GradientButtonDanger } from './GradientButton'
+import { GradientButton, GradientButtonDanger } from './GradientButton'
 import Icons from './Icons'
 import { InfoCircleOutlined } from '@ant-design/icons'
-import { message } from 'antd' 
-import { devLog } from '@/utils/index';
+import { message } from 'antd'
+import { devLog } from '@/utils/index'
 const Container = styled.div`
-  border: 1px solid  white ;
+  border: 1px solid white;
   border-radius: 10px;
   padding: 20px;
-  color :white ;
+  color: white;
   width: inherit;
   text-align: center;
-  outline:     lightcoral solid 1px;
+  outline: lightcoral solid 1px;
   transition: box-shadow 0.3s ease-in-out;
   animation: glow-animation 3s infinite alternate;
   @keyframes glow-animation {
@@ -21,7 +21,7 @@ const Container = styled.div`
         0 0 5px rgba(255, 0, 255, 0.5),
         0 0 10px rgba(0, 255, 255, 0.5);
       border-image-source: linear-gradient(90deg, #ff00ff, #00ffff);
-      border-image-slice: 10 ;
+      border-image-slice: 10;
       border-image-repeat: stretch;
     }
     50% {
@@ -64,13 +64,13 @@ const Message = styled.div`
   color: #e9bff8;
 `
 
-export const ConnectButton =   () => {
+export const ConnectButton = () => {
   const [listenResultStatus, setListenResultStatus] = React.useState(false)
-    const [messageApi, contextHolder] = message.useMessage()
-  const isFirstRender = useRef(0);   
+  const [messageApi, contextHolder] = message.useMessage()
+  const isFirstRender = useRef(0)
   const [listenStatusMessage, setListenStatusMessage] = React.useState('未连接到客户端')
-    const GlobalListenerStatusMessage = async (): Promise<[() => void, () => void]> => {
-      let address = await window.electron.ipcRenderer.invoke('getLocalWlanIP');
+  const GlobalListenerStatusMessage = async (): Promise<[() => void, () => void]> => {
+    let address = await window.electron.ipcRenderer.invoke('getLocalWlanIP')
     const start = () => {
       messageApi.open({
         type: 'success',
@@ -87,38 +87,31 @@ export const ConnectButton =   () => {
     }
     return [start, stop]
   }
-  useEffect(() =>
-  {
+  useEffect(() => {
     devLog(isFirstRender.current)
-     if (  isFirstRender.current <2    ) {
-       isFirstRender.current +=1 ; 
-       return;  
-    } 
-    
-    (async () =>
-    {
+    if (isFirstRender.current < 2) {
+      isFirstRender.current += 1
+      return
+    }
+
+    ;(async () => {
       let [start, stop] = await GlobalListenerStatusMessage()
-      if (listenResultStatus)
-      {
+      if (listenResultStatus) {
         // devAlert('start global message ')
         start()
-      } else if (!listenResultStatus)
-      {
+      } else if (!listenResultStatus) {
         // devAlert('stop  global message ')
         stop()
       }
-    })(); 
-  } , [listenResultStatus])
+    })()
+  }, [listenResultStatus])
 
   function handleListener() {
     setListenResultStatus(!listenResultStatus)
     setListenStatusMessage(listenResultStatus ? '未连接到客户端' : '启动成功,开始监听')
-    if (listenResultStatus)
-    {
+    if (listenResultStatus) {
       window.electron.ipcRenderer.send('stopServerListener')
-     }
-    else if (!listenResultStatus)
-    {
+    } else if (!listenResultStatus) {
       window.electron.ipcRenderer.send('startServerListener')
     }
   }

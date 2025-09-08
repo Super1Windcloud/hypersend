@@ -1,16 +1,16 @@
 import nodemailer from 'nodemailer'
-const email = 'ss1178933440@gmail.com' 
-const ownMail = '1178933440@qq.com'  
-import dotenv from 'dotenv' 
-dotenv.config()  
+const email = 'ss1178933440@gmail.com'
+const ownMail = '1178933440@qq.com'
+import dotenv from 'dotenv'
+dotenv.config()
 // 创建邮件发送的 transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.qq.com', // QQ 邮箱的 SMTP 服务器
   port: 465, // 使用 SSL 的端口
-  secure: true, 
+  secure: true,
   auth: {
-    user:    ownMail , // 发件人邮箱地址
-    pass:  process.env.qq_password // SMTP 邮箱授权码 
+    user: ownMail, // 发件人邮箱地址
+    pass: process.env.qq_password // SMTP 邮箱授权码
   }
 })
 
@@ -23,7 +23,7 @@ async function sendVerificationEmail(toEmail) {
   const verificationCode = generateVerificationCode() // 生成验证码
 
   const mailOptions = {
-    from:  ownMail , // 发件人地址
+    from: ownMail, // 发件人地址
     to: toEmail, // 收件人邮箱
     subject: '邮箱验证码 Fuck you ', // 邮件主题
     text: `您的验证码是: ${verificationCode}` // 邮件内容
@@ -40,7 +40,7 @@ async function sendVerificationEmail(toEmail) {
 }
 
 // 测试发送验证码
-sendVerificationEmail (email )
+sendVerificationEmail(email)
   .then((code) => {
     console.log('验证码:', code) // 显示发送的验证码
   })

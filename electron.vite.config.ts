@@ -24,7 +24,6 @@ export default defineConfig({
     },
     build: {
       outDir: 'dist/preload'
-
     }
   },
   renderer: {
@@ -34,10 +33,9 @@ export default defineConfig({
         '@': resolve('./src')
       }
     },
-    plugins: [react()]
-    , build: {
+    plugins: [react()],
+    build: {
       outDir: 'dist/renderer'
     }
   }
-
 })

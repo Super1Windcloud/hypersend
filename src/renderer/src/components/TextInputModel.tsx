@@ -71,14 +71,13 @@ export const TextInputModel: React.FC<TextInputModelProps> = ({ isModalOpen, tog
 
   function sendInputText() {
     window.electron.ipcRenderer.send('sendMessage', inputValue)
-
   }
   return (
     <>
       <Modal
         title="请输入文本内容"
         open={isModalOpen ? isModalOpen[0] : false}
-        onOk ={ sendInputText }
+        onOk={sendInputText}
         onCancel={() => (toggleModal ? toggleModal(0, false) : null)}
         footer={(_, { OkBtn, CancelBtn }) => (
           <>

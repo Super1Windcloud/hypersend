@@ -1,6 +1,6 @@
-import { devLog  } from '@/utils'
- import  fs from 'fs'
- import { Monitor   }   from  'node-screenshots';
+import { devLog } from '@/utils'
+import fs from 'fs'
+import { Monitor } from 'node-screenshots'
 export async function checkPort(port) {
   const net = require('net')
 
@@ -64,15 +64,18 @@ export async function checkAndKillPort(port) {
   }
 }
 
-
-export   function captureScreenMonitorToPNG ()
-{
+export function captureScreenMonitorToPNG() {
   let monitor = Monitor.fromPoint(100, 100)
   devLog(monitor, monitor?.id)
-  let image   = monitor?.captureImageSync()
-  if (!image) { console.error('No image captured'); return }
-  let dir  = `img`;
-  if (!fs.existsSync(dir)){  fs.mkdirSync(dir, { recursive: true });}
+  let image = monitor?.captureImageSync()
+  if (!image) {
+    console.error('No image captured')
+    return
+  }
+  let dir = `img`
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
 
   fs.writeFileSync(`img/${monitor?.id}-sync.png`, image.toPngSync())
 
@@ -90,22 +93,23 @@ export   function captureScreenMonitorToPNG ()
       isPrimary: capturer.isPrimary
     })
   })
-  return  image.toPngSync()
+  return image.toPngSync()
 }
 
-export async function captureScreenWindowToBMP()
-{
+export async function captureScreenWindowToBMP() {
   let monitor = Monitor.fromPoint(100, 100)
- devLog(monitor, monitor?.id)
+  devLog(monitor, monitor?.id)
   let image = monitor?.captureImageSync()
-  if (!image) { console.error('No image captured'); return }
+  if (!image) {
+    console.error('No image captured')
+    return
+  }
   fs.writeFileSync(`img/${monitor?.id}-sync.bmp`, image.toBmpSync())
 
   let monitors = Monitor.all()
 
-  monitors.forEach((capturer) =>
-  {
-  devLog({
+  monitors.forEach((capturer) => {
+    devLog({
       id: capturer.id,
       x: capturer.x,
       y: capturer.y,
@@ -119,15 +123,8 @@ export async function captureScreenWindowToBMP()
   return image?.toBmpSync()
 }
 
-
-
-
-
-
-export   function captureScreenMonitorToJpeg ()
-{
+export function captureScreenMonitorToJpeg() {
   //  获取屏幕画面 通过Node
-
 
   let monitor = Monitor.fromPoint(100, 100)
 
@@ -135,10 +132,12 @@ export   function captureScreenMonitorToJpeg ()
 
   let image = monitor?.captureImageSync()
 
-
   monitor?.captureImage().then((data) => {
-   devLog(data)
-    if (!data) { console.error('No image captured'); return }
+    devLog(data)
+    if (!data) {
+      console.error('No image captured')
+      return
+    }
     fs.writeFileSync(`img/${monitor?.id}.jpeg`, data.toJpegSync())
   })
 
@@ -156,8 +155,5 @@ export   function captureScreenMonitorToJpeg ()
       isPrimary: capturer.isPrimary
     })
   })
-  return  image?.toJpegSync()
+  return image?.toJpegSync()
 }
-
-
-

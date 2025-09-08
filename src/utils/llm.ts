@@ -57,10 +57,8 @@ export async function KimiServices() {
     },
     requestOptions
   )
-  devLog (completion.choices[0].message.content)
+  devLog(completion.choices[0].message.content)
   return completion.choices[0].message.contents
 }
 
-
-
-deepSeekServices();
+deepSeekServices()

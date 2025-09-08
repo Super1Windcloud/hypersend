@@ -7,11 +7,11 @@
   "homepage": "https://gitee.com/superwindcloud/hypersend",
   "type": "module",
   "license": "MIT",
-  "private": false ,
+  "private": false,
   "scripts": {
     "native": "electron . ",
-    "format": "prettier --write .",
-    "lint": "eslint --cache .",
+    "format": "prettier --write \"src/**/*.{js,ts,jsx,tsx,css,scss,json,md}\"",
+    "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --fix",
     "farm": "farm build ",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
@@ -58,6 +58,7 @@
     "node-screenshots": "^0.2.1",
     "onnxruntime-node": "1.20.1",
     "openai": "^4.90.0",
+    "qrcode.react": "^4.2.0",
     "styled-components": "^6.1.15"
   },
   "devDependencies": {
@@ -111,13 +112,6 @@
       "onnxruntime-node",
       "@fastify/http-proxy",
       "@electron-forge/maker-wix",
-      "@bitdisaster/exe-icon-extractor"
-    ],
-    "configDependencies": {
-      "build-scripts-allowlist": "0.20250131.0+sha512-vuePnd+0F3PtuyFIHT1XsfOK7/BGkK1QmIMRHHPo+6LW7Wr/37QsQV3R/UztxoFWHHm9pSbCUovigSmeapfdLA=="
-    },
-    "onlyBuiltDependenciesFile": "node_modules/.pnpm-config/build-scripts-allowlist/common.json",
-    "ignoredBuiltDependencies": [
       "@bitdisaster/exe-icon-extractor"
     ]
   },

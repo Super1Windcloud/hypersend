@@ -1,11 +1,10 @@
 import styled, { keyframes, css } from 'styled-components'
-import  { useState } from 'react'
+import { useState } from 'react'
 import { ConnectButton } from '@renderer/components/ConnectButton'
 
-import {  Spin } from 'antd'
+import { Spin } from 'antd'
 
-
-  type    IconProps  = {
+type IconProps = {
   isRotating: boolean
   [key: string]: any
 }
@@ -36,7 +35,6 @@ const IconWithChildren = (props: IconProps) => {
   )
 }
 
-
 const ConnectWrapper = styled.div`
   display: inline-flex;
   align-items: center;
@@ -53,7 +51,7 @@ const rotateAnimation = keyframes`
 `
 const Title = styled.div`
   font-size: 16px;
-  color:   palevioletred;
+  color: palevioletred;
   width: auto;
   padding: 10px;
   border: 1px solid transparent;
@@ -61,10 +59,7 @@ const Title = styled.div`
 `
 /// "Ctrl + Shift + S"组合按键即可截图 / 也可使用看答案设备进行远程截图
 
-
-
-const ConnectToPeerNearbyDevices = () =>
-{
+const ConnectToPeerNearbyDevices = () => {
   //@ts-ignore
   const [isRotating, setIsRotating] = useState(false)
   //@ts-ignore

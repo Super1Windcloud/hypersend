@@ -1,4 +1,4 @@
 provider: superwindcloud
-repo : hypersend
+repo: hypersend
 url: https://example.com/auto-updates
 updaterCacheDirName: hypersend-updater

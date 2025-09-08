@@ -1,57 +1,49 @@
-//@ts-nocheck
 import fastify, { type FastifyRequest, type FastifyInstance } from 'fastify'
 import path from 'path'
 import { devLog, writeLog } from '@/utils'
-import  { type WebSocket } from '@fastify/websocket'
+import { type WebSocket } from '@fastify/websocket'
 import fastifyStatic from '@fastify/static'
 import { captureScreenMonitorToPNG, checkAndKillPort } from './system'
 import fastifyCors from '@fastify/cors'
-import {  blobUrlToBuffer , getPaddleOcrResult } from './ocr';
+import { blobUrlToBuffer, getPaddleOcrResult } from './ocr'
 import { TypeBoxTypeProvider } from '@fastify/type-provider-typebox'
 import { AliOcrClient, createAppLLMServices } from './request'
-import clipboardy from 'clipboardy';
-import { dialog } from 'electron';
-import { readFile } from 'fs/promises';
+import clipboardy from 'clipboardy'
+import { dialog } from 'electron'
+import { readFile } from 'fs/promises'
 
 let app: FastifyInstance | null | undefined = null
-let wsClients: Set<WebSocket> = new Set(); // 存储 WebSocket 客户端
+const wsClients: Set<WebSocket> = new Set() // 存储 WebSocket 客户端
 import dotenv from 'dotenv'
 import { createWriteStream } from 'fs'
 import { envPrint } from '@/utils/api'
-const __public = path.join(process.cwd(), 'public');
-console.log("public:", __public);
-function initEnv()
-{
-  const writeStream = createWriteStream('./log.txt');
-  writeStream.end();
-  if (process.env.NODE_ENV === 'development')
-  {
+const __public = path.join(process.cwd(), 'public')
+console.log('public:', __public)
+function initEnv() {
+  const writeStream = createWriteStream('./log.txt')
+  writeStream.end()
+  if (process.env.NODE_ENV === 'development') {
     dotenv.config()
-  }
-  else
-  {
-    let envPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public', '.env');
-    dotenv.config({ path: envPath });
-    writeLog('envPath:' + envPath + '\n');
+  } else {
+    const envPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public', '.env')
+    dotenv.config({ path: envPath })
+    writeLog('envPath:' + envPath + '\n')
   }
 }
 
-async function createFastifyApp()
-{
-  initEnv();
-  let rootPath;
-  if (process.env.NODE_ENV === 'development')
-  {
-    rootPath =  path.join(process.cwd(), 'public/dist-vite');
-    writeLog('\n' + 'rootPath:' + rootPath);
-  } else
-  {
+async function createFastifyApp() {
+  initEnv()
+  let rootPath
+  if (process.env.NODE_ENV === 'development') {
+    rootPath = path.join(process.cwd(), 'public/dist-vite')
+    writeLog('\n' + 'rootPath:' + rootPath)
+  } else {
     rootPath = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'public/dist-vite')
-    rootPath = path.join(process.cwd(), 'public/dist-vite');
+    rootPath = path.join(process.cwd(), 'public/dist-vite')
 
-    writeLog('\n' + 'rootPath:' + rootPath);
-  };
-  app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>()  // 注册 fastify-typebox 插件
+    writeLog('\n' + 'rootPath:' + rootPath)
+  }
+  app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>() // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
     root: rootPath,
     prefix: '/'
@@ -64,8 +56,8 @@ async function createFastifyApp()
   app.register(require('@fastify/http-proxy'), {
     upstream: 'http://localhost:33333',
     prefix: '/api', // optional
-    http2: false, // optional
-  });
+    http2: false // optional
+  })
 
   app.register(fastifyCors, {
     origin: '*', // 允许所有域名跨域访问
@@ -73,94 +65,69 @@ async function createFastifyApp()
     allowedHeaders: ['Content-Type', 'Authorization'] // 允许的请求头
   })
 
-  app.get('/', async (request, reply) =>
-  {
-    try
-    {
+  app.get('/', async (request, reply) => {
+    try {
       await reply.sendFile('./vite.html')
-    } catch (err)
-    {
+    } catch (err) {
       reply.status(500).send('Internal Server Error')
     }
   })
 
-  app.register(async function (fastify)
-  {
-    fastify.get('/ws', { websocket: true }, async (socket: WebSocket, req: FastifyRequest) =>
-    {
-      socket.on('message', (message) =>
-      {
+  app.register(async function (fastify) {
+    fastify.get('/ws', { websocket: true }, async (socket: WebSocket, req: FastifyRequest) => {
+      socket.on('message', (message) => {
         // message.toString() === 'hi from client'
         socket.send('hi from server')
       })
 
-      socket.on('close', () =>
-      {
-        wsClients.delete(socket); // 移除 WebSocket 客户端
+      socket.on('close', () => {
+        wsClients.delete(socket) // 移除 WebSocket 客户端
         console.log('监听服务已断开 WebSocket')
-
       })
 
       console.log('监听服务已连接 WebSocket')
-      wsClients.add(socket); // 存储 WebSocket 客户端
+      wsClients.add(socket) // 存储 WebSocket 客户端
     })
-
   })
-  createAppLLMServices( app );
+  createAppLLMServices(app)
 
-
-  app.get('/json', async (request, reply) =>
-  {
+  app.get('/json', async (request, reply) => {
     await reply.send({ message: 'Hello, World!' })
   })
 
-
-
-  app.post('/ocr/ali', async (request, reply) =>
-  {
-    try
-    {
-      let { url } = request.body as { url: string };
-      let ocrStr = await AliOcrClient.run(url);
+  app.post('/ocr/ali', async (request, reply) => {
+    try {
+      let { url } = request.body as { url: string }
+      let ocrStr = await AliOcrClient.run(url)
       await reply.send(ocrStr)
-    } catch (err)
-    {
+    } catch (err) {
       console.error(err)
       reply.status(500).send('ocr ali router Internal Server Error')
     }
   })
 
-
-
-  app.post('/ocr/paddleOcr', async (request, reply) =>
-  {
-    try
-    {
+  app.post('/ocr/paddleOcr', async (request, reply) => {
+    try {
       let { url } = request.body as { url: string }
       // let buffer  :Buffer  =   base64ToBuffer(url);
-      let buffer: Buffer = await blobUrlToBuffer(url);
-      let ocrStr = await getPaddleOcrResult(buffer);
+      let buffer: Buffer = await blobUrlToBuffer(url)
+      let ocrStr = await getPaddleOcrResult(buffer)
       await reply.send(ocrStr)
-    } catch (err)
-    {
+    } catch (err) {
       console.error(err)
       reply.status(500).send('ocr  paddleOcr router Internal Server Error \n' + err)
     }
   })
 
-  app.get('/capture', async (request, reply) =>
-  {
-    try
-    {
-      const image = await captureScreenMonitorToPNG();
-      if (!image)
-      {
+  app.get('/capture', async (request, reply) => {
+    try {
+      const image = await captureScreenMonitorToPNG()
+      if (!image) {
         console.error('No image captured')
         return
       }
       await reply.send(image)
-    } catch (err)
-    {
+    } catch (err) {
       console.error(err)
       reply.status(500).send('request capture router Internal Server Error\n' + err)
     }
@@ -169,16 +136,13 @@ async function createFastifyApp()
   return app
 }
 
-export async function startClientServer()
-{
+export async function startClientServer() {
   envPrint()
   app = app ?? (await createFastifyApp())
   await checkAndKillPort(33333)
   // 启动服务器并监听 33333 端口
-  app.listen({ port: 33333, host: '0.0.0.0' }, (err, address) =>
-  {
-    if (err)
-    {
+  app.listen({ port: 33333, host: '0.0.0.0' }, (err, address) => {
+    if (err) {
       console.error('FUCK', err)
       process.exit(1)
     }
@@ -186,134 +150,109 @@ export async function startClientServer()
   })
 }
 
-export function stopClientServer()
-{
+export function stopClientServer() {
   if (!app) return
-  app.close(() =>
-  {
+  app.close(() => {
     devLog('Client Server is closed')
     app = null
   })
 }
 
-export function sendMessageToClient(message: string)
-{
-
+export function sendMessageToClient(message: string) {
   if (!app || !wsClients.size) return
   const wsJson = {
     type: 'text',
     data: message
   }
-  wsClients.forEach((client) =>
-  {
+  wsClients.forEach((client) => {
     client.send(JSON.stringify(wsJson))
   })
 }
-export async function sendBlobToClient(base64: Base64URLString, filePath?: string)
-{
-  if (!app || !wsClients.size) return;
-  let name = filePath?.match(/[^/\\]+$/)?.[0] ?? 'unknown';
-  devLog(name);
+export async function sendBlobToClient(base64: Base64URLString, filePath?: string) {
+  if (!app || !wsClients.size) return
+  let name = filePath?.match(/[^/\\]+$/)?.[0] ?? 'unknown'
+  devLog(name)
   const wsJson = {
     type: 'base64',
     data: base64,
     fileName: name
   }
-  wsClients.forEach((client) =>
-  {
+  wsClients.forEach((client) => {
     client.send(JSON.stringify(wsJson))
-  });
+  })
 }
 
-export async function sendFileToClient()
-{
+export async function sendFileToClient() {
   // 从环境变量中获取用户主目录路径
-  const defaultDir = process.env.USERPROFILE;
+  const defaultDir = process.env.USERPROFILE
   // 如果没有获取到用户主目录路径，则直接返回
   if (!defaultDir) return
   // 使用 try-catch 块来处理可能出现的异常
-  try
-  {
+  try {
     // 使用 dialog.showOpenDialog 显示文件选择对话框，并等待用户选择文件
     let result = await dialog.showOpenDialog({
       properties: ['openFile'], // 只允许选择文件
       filters: [
-        { name: '所有文件', extensions: ['*'] }, // 允许所有类型的文件
+        { name: '所有文件', extensions: ['*'] } // 允许所有类型的文件
       ],
-      defaultPath: defaultDir, // 默认打开用户主目录
+      defaultPath: defaultDir // 默认打开用户主目录
     })
 
-    if (!result.canceled && result.filePaths.length > 0)
-    {
-      const selectedFilePath = result.filePaths[0];
-      devLog('用户选择的文件路径:', selectedFilePath);
-      if (!selectedFilePath) return null;
-      await sendFileBlobToClient(selectedFilePath);
+    if (!result.canceled && result.filePaths.length > 0) {
+      const selectedFilePath = result.filePaths[0]
+      devLog('用户选择的文件路径:', selectedFilePath)
+      if (!selectedFilePath) return null
+      await sendFileBlobToClient(selectedFilePath)
     }
-    return null;
-  }
-  catch (err)
-  {
-    console.error('选择文件时出错:', err);
-    return null;
+    return null
+  } catch (err) {
+    console.error('选择文件时出错:', err)
+    return null
   }
 }
 
-export function sendFolderToClient()
-{
-  const folderPath = process.env.USERPROFILE;
-  if (!folderPath)
-  {
-    console.error('无法获取用户主目录');
-    return;
+export function sendFolderToClient() {
+  const folderPath = process.env.USERPROFILE
+  if (!folderPath) {
+    console.error('无法获取用户主目录')
+    return
   }
   dialog
     .showOpenDialog({
-      properties: ['openDirectory'], // 只允许选择文件夹
+      properties: ['openDirectory'] // 只允许选择文件夹
     })
-    .then((result) =>
-    {
-      if (!result.canceled && result.filePaths.length > 0)
-      {
-        const selectedFolderPath = result.filePaths[0];
-        devLog('用户选择的目录路径:', selectedFolderPath);
-
+    .then((result) => {
+      if (!result.canceled && result.filePaths.length > 0) {
+        const selectedFolderPath = result.filePaths[0]
+        devLog('用户选择的目录路径:', selectedFolderPath)
       }
     })
-    .catch((err) =>
-    {
-      console.error('选择文件夹时出错:', err);
-    });
+    .catch((err) => {
+      console.error('选择文件夹时出错:', err)
+    })
 }
 
-
-export function sendClipboardToClient()
-{
-  clipboardy.read().then(text =>
-  {
-    devLog(text);
-    sendMessageToClient(text);
-  }).catch(err =>
-  {
-    console.error(err);
-  });
-
+export function sendClipboardToClient() {
+  clipboardy
+    .read()
+    .then((text) => {
+      devLog(text)
+      sendMessageToClient(text)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
+export async function sendFileBlobToClient(filePath: string) {
+  try {
+    const fileBuffer: Buffer = await readFile(filePath)
 
-export async function sendFileBlobToClient(filePath: string)
-{
-  try
-  {
-    const fileBuffer: Buffer = await readFile(filePath);
+    const base64 = fileBuffer.toString('base64')
+    await sendBlobToClient(base64, filePath)
 
-
-    const base64 = fileBuffer.toString('base64');
-    await sendBlobToClient(base64, filePath);
-
-    devLog('文件已成功发送到前端');
-  } catch (error)
-  {
-    console.error('读取文件失败:', error);
+    devLog('文件已成功发送到前端')
+  } catch (error) {
+    console.error('读取文件失败:', error)
   }
 }

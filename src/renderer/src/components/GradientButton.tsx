@@ -1,4 +1,4 @@
-import { forwardRef   } from 'react'
+import { forwardRef } from 'react'
 import { AntDesignOutlined } from '@ant-design/icons'
 import { Button, ConfigProvider, Space } from 'antd'
 import { createStyles } from 'antd-style'
@@ -53,16 +53,18 @@ const useStyleDanger = createStyles(({ prefixCls, css }) => ({
 
 // 使用 React.forwardRef 包裹组件
 
-export  const GradientButton = forwardRef<HTMLButtonElement, { onClick?: () => void ,status  ?:boolean  }>((props, ref) => {
-  const { onClick, status , ...restProps } = props
+export const GradientButton = forwardRef<
+  HTMLButtonElement,
+  { onClick?: () => void; status?: boolean }
+>((props, ref) => {
+  const { onClick, status, ...restProps } = props
 
-
-  const { styles } =  useStyle();
+  const { styles } = useStyle()
   // console.log( typeof status  ,status  )
   return (
     <ConfigProvider
       button={{
-        className:     styles.linearGradientButton
+        className: styles.linearGradientButton
       }}
     >
       <Space>
@@ -81,19 +83,18 @@ export  const GradientButton = forwardRef<HTMLButtonElement, { onClick?: () => v
   )
 })
 
+export const GradientButtonDanger = forwardRef<
+  HTMLButtonElement,
+  { onClick?: () => void; status?: boolean }
+>((props, ref) => {
+  const { onClick, status, ...restProps } = props
 
-
-
-export  const GradientButtonDanger  = forwardRef<HTMLButtonElement, { onClick?: () => void ,status  ?:boolean  }>((props, ref) => {
-  const { onClick, status , ...restProps } = props
-
-
-  const { styles } =  useStyleDanger ();
+  const { styles } = useStyleDanger()
   // console.log( typeof status  ,status  )
   return (
     <ConfigProvider
       button={{
-        className:     styles.linearGradientButton
+        className: styles.linearGradientButton
       }}
     >
       <Space>
@@ -113,6 +114,5 @@ export  const GradientButtonDanger  = forwardRef<HTMLButtonElement, { onClick?: 
   )
 })
 
-
-GradientButton.displayName = 'GradientButton';
-GradientButtonDanger .displayName = 'GradientButtonDanger';
+GradientButton.displayName = 'GradientButton'
+GradientButtonDanger.displayName = 'GradientButtonDanger'

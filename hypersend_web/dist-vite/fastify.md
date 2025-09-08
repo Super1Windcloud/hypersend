@@ -1,5 +1,3 @@
- 
-
 <br />
 <p>
 An efficient server implies a lower cost of the infrastructure, better
@@ -15,6 +13,7 @@ fastest web frameworks in town.
 
 The `main` branch refers to the Fastify `v5` release.
 Check out the [`4.x` branch](https://github.com/fastify/fastify/tree/4.x) for `v4`.
+
 </p>   
 ### Table of Contents
 
@@ -29,7 +28,6 @@ Check out the [`4.x` branch](https://github.com/fastify/fastify/tree/4.x) for `v
 - [Team](#team)
 - [Hosted by](#hosted-by)
 - [License](#license)
-
 
 ### Quick start
 
@@ -68,7 +66,6 @@ Under the hood `npm init` downloads and runs [Fastify
 Create](https://github.com/fastify/create-fastify), which in turn uses the
 generate functionality of [Fastify CLI](https://github.com/fastify/fastify-cli).
 
-
 ### Install
 
 To install Fastify in an existing project as a dependency:
@@ -95,11 +92,11 @@ const fastify = require('public/fastify')({
 
 // Declare a route
 fastify.get('/', (request, reply) => {
-  reply.send({hello: 'world'})
+  reply.send({ hello: 'world' })
 })
 
 // Run the server!
-fastify.listen({port: 3000}, (err, address) => {
+fastify.listen({ port: 3000 }, (err, address) => {
   if (err) throw err
   // Server is now listening on ${address}
 })
@@ -121,10 +118,10 @@ const fastify = require('public/fastify')({
 
 fastify.get('/', async (request, reply) => {
   reply.type('application/json').code(200)
-  return {hello: 'world'}
+  return { hello: 'world' }
 })
 
-fastify.listen({port: 3000}, (err, address) => {
+fastify.listen({ port: 3000 }, (err, address) => {
   if (err) throw err
   // Server is now listening on ${address}
 })
@@ -135,6 +132,7 @@ href="./docs/Guides/Getting-Started.md"><code><b>Getting Started</b></code></a>.
 If you learn best by reading code, explore the official [demo](https://github.com/fastify/demo).
 
 > ## Note
+>
 > `.listen` binds to the local host, `localhost`, interface by default
 > (`127.0.0.1` or `::1`, depending on the operating system configuration). If
 > you are running Fastify in a container (Docker,
@@ -164,53 +162,54 @@ If you learn best by reading code, explore the official [demo](https://github.co
 
 ### Benchmarks
 
-__Machine:__ EX41S-SSD, Intel Core i7, 4Ghz, 64GB RAM, 4C/8T, SSD.
+**Machine:** EX41S-SSD, Intel Core i7, 4Ghz, 64GB RAM, 4C/8T, SSD.
 
-__Method:__: `autocannon -c 100 -d 40 -p 10 localhost:3000` * 2, taking the
+**Method:**: `autocannon -c 100 -d 40 -p 10 localhost:3000` \* 2, taking the
 second average
 
-| Framework          | Version                    | Router?      |  Requests/sec |
-| :----------------- | :------------------------- | :----------: | ------------: |
-| Express            | 4.17.3                     | &#10003;     | 14,200        |
-| hapi               | 20.2.1                     | &#10003;     | 42,284        |
-| Restify            | 8.6.1                      | &#10003;     | 50,363        |
-| Koa                | 2.13.0                     | &#10007;     | 54,272        |
-| **Fastify**        | **4.0.0**                  | **&#10003;** | **77,193**    |
-| -                  |                            |              |               |
-| `http.Server`      | 16.14.2	                  | &#10007;     | 74,513        |
+| Framework     | Version   |   Router?    | Requests/sec |
+| :------------ | :-------- | :----------: | -----------: |
+| Express       | 4.17.3    |   &#10003;   |       14,200 |
+| hapi          | 20.2.1    |   &#10003;   |       42,284 |
+| Restify       | 8.6.1     |   &#10003;   |       50,363 |
+| Koa           | 2.13.0    |   &#10007;   |       54,272 |
+| **Fastify**   | **4.0.0** | **&#10003;** |   **77,193** |
+| -             |           |              |              |
+| `http.Server` | 16.14.2   |   &#10007;   |       74,513 |
 
 These benchmarks taken using https://github.com/fastify/benchmarks. This is a
 synthetic "hello world" benchmark that aims to evaluate the framework overhead.
 The overhead that each framework has on your application depends on your
-application. You should __always__ benchmark if performance matters to you.
+application. You should **always** benchmark if performance matters to you.
 
 ## Documentation
-* [__`Getting Started`__](./docs/Guides/Getting-Started.md)
-* [__`Guides`__](./docs/Guides/Index.md)
-* [__`Server`__](./docs/Reference/Server.md)
-* [__`Routes`__](./docs/Reference/Routes.md)
-* [__`Encapsulation`__](./docs/Reference/Encapsulation.md)
-* [__`Logging`__](./docs/Reference/Logging.md)
-* [__`Middleware`__](./docs/Reference/Middleware.md)
-* [__`Hooks`__](./docs/Reference/Hooks.md)
-* [__`Decorators`__](./docs/Reference/Decorators.md)
-* [__`Validation and Serialization`__](./docs/Reference/Validation-and-Serialization.md)
-* [__`Fluent Schema`__](./docs/Guides/Fluent-Schema.md)
-* [__`Lifecycle`__](./docs/Reference/Lifecycle.md)
-* [__`Reply`__](./docs/Reference/Reply.md)
-* [__`Request`__](./docs/Reference/Request.md)
-* [__`Errors`__](./docs/Reference/Errors.md)
-* [__`Content Type Parser`__](./docs/Reference/ContentTypeParser.md)
-* [__`Plugins`__](./docs/Reference/Plugins.md)
-* [__`Testing`__](./docs/Guides/Testing.md)
-* [__`Benchmarking`__](./docs/Guides/Benchmarking.md)
-* [__`How to write a good plugin`__](./docs/Guides/Write-Plugin.md)
-* [__`Plugins Guide`__](./docs/Guides/Plugins-Guide.md)
-* [__`HTTP2`__](./docs/Reference/HTTP2.md)
-* [__`Long Term Support`__](./docs/Reference/LTS.md)
-* [__`TypeScript and types support`__](./docs/Reference/TypeScript.md)
-* [__`Serverless`__](./docs/Guides/Serverless.md)
-* [__`Recommendations`__](./docs/Guides/Recommendations.md)
+
+- [**`Getting Started`**](./docs/Guides/Getting-Started.md)
+- [**`Guides`**](./docs/Guides/Index.md)
+- [**`Server`**](./docs/Reference/Server.md)
+- [**`Routes`**](./docs/Reference/Routes.md)
+- [**`Encapsulation`**](./docs/Reference/Encapsulation.md)
+- [**`Logging`**](./docs/Reference/Logging.md)
+- [**`Middleware`**](./docs/Reference/Middleware.md)
+- [**`Hooks`**](./docs/Reference/Hooks.md)
+- [**`Decorators`**](./docs/Reference/Decorators.md)
+- [**`Validation and Serialization`**](./docs/Reference/Validation-and-Serialization.md)
+- [**`Fluent Schema`**](./docs/Guides/Fluent-Schema.md)
+- [**`Lifecycle`**](./docs/Reference/Lifecycle.md)
+- [**`Reply`**](./docs/Reference/Reply.md)
+- [**`Request`**](./docs/Reference/Request.md)
+- [**`Errors`**](./docs/Reference/Errors.md)
+- [**`Content Type Parser`**](./docs/Reference/ContentTypeParser.md)
+- [**`Plugins`**](./docs/Reference/Plugins.md)
+- [**`Testing`**](./docs/Guides/Testing.md)
+- [**`Benchmarking`**](./docs/Guides/Benchmarking.md)
+- [**`How to write a good plugin`**](./docs/Guides/Write-Plugin.md)
+- [**`Plugins Guide`**](./docs/Guides/Plugins-Guide.md)
+- [**`HTTP2`**](./docs/Reference/HTTP2.md)
+- [**`Long Term Support`**](./docs/Reference/LTS.md)
+- [**`TypeScript and types support`**](./docs/Reference/TypeScript.md)
+- [**`Serverless`**](./docs/Guides/Serverless.md)
+- [**`Recommendations`**](./docs/Guides/Recommendations.md)
 
 ## Ecosystem
 
@@ -224,6 +223,7 @@ application. You should __always__ benchmark if performance matters to you.
   the maintainers.
 
 ## Support
+
 Please visit [Fastify help](https://github.com/fastify/help) to view prior
 support issues and to ask new support questions.
 
@@ -246,101 +246,105 @@ _Fastify_ is the result of the work of a great community. Team members are
 listed in alphabetical order.
 
 **Lead Maintainers:**
-* [__Matteo Collina__](https://github.com/mcollina),
+
+- [**Matteo Collina**](https://github.com/mcollina),
   <https://twitter.com/matteocollina>, <https://www.npmjs.com/~matteo.collina>
-* [__Tomas Della Vedova__](https://github.com/delvedor),
+- [**Tomas Della Vedova**](https://github.com/delvedor),
   <https://twitter.com/delvedor>, <https://www.npmjs.com/~delvedor>
-* [__KaKa Ng__](https://github.com/climba03003),
+- [**KaKa Ng**](https://github.com/climba03003),
   <https://www.npmjs.com/~climba03003>
-* [__Manuel Spigolon__](https://github.com/eomm),
+- [**Manuel Spigolon**](https://github.com/eomm),
   <https://twitter.com/manueomm>, <https://www.npmjs.com/~eomm>
-* [__James Sumners__](https://github.com/jsumners),
+- [**James Sumners**](https://github.com/jsumners),
   <https://twitter.com/jsumners79>, <https://www.npmjs.com/~jsumners>
 
 ### Fastify Core team
-* [__Aras Abbasi__](https://github.com/uzlopak),
+
+- [**Aras Abbasi**](https://github.com/uzlopak),
   <https://www.npmjs.com/~uzlopak>
-* [__Harry Brundage__](https://github.com/airhorns/),
+- [**Harry Brundage**](https://github.com/airhorns/),
   <https://twitter.com/harrybrundage>, <https://www.npmjs.com/~airhorns>
-* [__Matteo Collina__](https://github.com/mcollina),
+- [**Matteo Collina**](https://github.com/mcollina),
   <https://twitter.com/matteocollina>, <https://www.npmjs.com/~matteo.collina>
-* [__Gürgün Dayıoğlu__](https://github.com/gurgunday),
+- [**Gürgün Dayıoğlu**](https://github.com/gurgunday),
   <https://www.npmjs.com/~gurgunday>
-* [__Tomas Della Vedova__](https://github.com/delvedor),
+- [**Tomas Della Vedova**](https://github.com/delvedor),
   <https://twitter.com/delvedor>, <https://www.npmjs.com/~delvedor>
-* [__Carlos Fuentes__](https://github.com/metcoder95),
+- [**Carlos Fuentes**](https://github.com/metcoder95),
   <https://twitter.com/metcoder95>, <https://www.npmjs.com/~metcoder95>
-* [__Vincent Le Goff__](https://github.com/zekth)
-* [__Luciano Mammino__](https://github.com/lmammino),
+- [**Vincent Le Goff**](https://github.com/zekth)
+- [**Luciano Mammino**](https://github.com/lmammino),
   <https://twitter.com/loige>, <https://www.npmjs.com/~lmammino>
-* [__KaKa Ng__](https://github.com/climba03003),
+- [**KaKa Ng**](https://github.com/climba03003),
   <https://www.npmjs.com/~climba03003>
-* [__Luis Orbaiceta__](https://github.com/luisorbaiceta),
+- [**Luis Orbaiceta**](https://github.com/luisorbaiceta),
   <https://twitter.com/luisorbai>, <https://www.npmjs.com/~luisorbaiceta>
-* [__Maksim Sinik__](https://github.com/fox1t),
+- [**Maksim Sinik**](https://github.com/fox1t),
   <https://twitter.com/maksimsinik>, <https://www.npmjs.com/~fox1t>
-* [__Manuel Spigolon__](https://github.com/eomm),
+- [**Manuel Spigolon**](https://github.com/eomm),
   <https://twitter.com/manueomm>, <https://www.npmjs.com/~eomm>
-* [__James Sumners__](https://github.com/jsumners),
+- [**James Sumners**](https://github.com/jsumners),
   <https://twitter.com/jsumners79>, <https://www.npmjs.com/~jsumners>
 
 ### Fastify Plugins team
-* [__Harry Brundage__](https://github.com/airhorns/),
+
+- [**Harry Brundage**](https://github.com/airhorns/),
   <https://twitter.com/harrybrundage>, <https://www.npmjs.com/~airhorns>
-* [__Simone Busoli__](https://github.com/simoneb),
+- [**Simone Busoli**](https://github.com/simoneb),
   <https://twitter.com/simonebu>, <https://www.npmjs.com/~simoneb>
-* [__Dan Castillo__](https://github.com/dancastillo),
+- [**Dan Castillo**](https://github.com/dancastillo),
   <https://www.npmjs.com/~dancastillo>
-* [__Matteo Collina__](https://github.com/mcollina),
+- [**Matteo Collina**](https://github.com/mcollina),
   <https://twitter.com/matteocollina>, <https://www.npmjs.com/~matteo.collina>
-* [__Gürgün Dayıoğlu__](https://github.com/gurgunday),
+- [**Gürgün Dayıoğlu**](https://github.com/gurgunday),
   <https://www.npmjs.com/~gurgunday>
-* [__Tomas Della Vedova__](https://github.com/delvedor),
+- [**Tomas Della Vedova**](https://github.com/delvedor),
   <https://twitter.com/delvedor>, <https://www.npmjs.com/~delvedor>
-* [__Carlos Fuentes__](https://github.com/metcoder95),
+- [**Carlos Fuentes**](https://github.com/metcoder95),
   <https://twitter.com/metcoder95>, <https://www.npmjs.com/~metcoder95>
-* [__Vincent Le Goff__](https://github.com/zekth)
-* [__Jean Michelet__](https://github.com/jean-michelet),
+- [**Vincent Le Goff**](https://github.com/zekth)
+- [**Jean Michelet**](https://github.com/jean-michelet),
   <https://www.npmjs.com/~jean-michelet>
-* [__KaKa Ng__](https://github.com/climba03003),
+- [**KaKa Ng**](https://github.com/climba03003),
   <https://www.npmjs.com/~climba03003>
-* [__Maksim Sinik__](https://github.com/fox1t),
+- [**Maksim Sinik**](https://github.com/fox1t),
   <https://twitter.com/maksimsinik>, <https://www.npmjs.com/~fox1t>
-* [__Frazer Smith__](https://github.com/Fdawgs), <https://www.npmjs.com/~fdawgs>
-* [__Manuel Spigolon__](https://github.com/eomm),
+- [**Frazer Smith**](https://github.com/Fdawgs), <https://www.npmjs.com/~fdawgs>
+- [**Manuel Spigolon**](https://github.com/eomm),
   <https://twitter.com/manueomm>, <https://www.npmjs.com/~eomm>
 
 ### Emeritus Contributors
+
 Great contributors to a specific area of the Fastify ecosystem will be invited
 to join this group by Lead Maintainers when they decide to step down from the
 active contributor's group.
 
-* [__Tommaso Allevi__](https://github.com/allevo),
+- [**Tommaso Allevi**](https://github.com/allevo),
   <https://twitter.com/allevitommaso>, <https://www.npmjs.com/~allevo>
-* [__Ethan Arrowood__](https://github.com/Ethan-Arrowood/),
+- [**Ethan Arrowood**](https://github.com/Ethan-Arrowood/),
   <https://twitter.com/arrowoodtech>, <https://www.npmjs.com/~ethan_arrowood>
-* [__Çağatay Çalı__](https://github.com/cagataycali),
+- [**Çağatay Çalı**](https://github.com/cagataycali),
   <https://twitter.com/cagataycali>, <https://www.npmjs.com/~cagataycali>
-* [__David Mark Clements__](https://github.com/davidmarkclements),
+- [**David Mark Clements**](https://github.com/davidmarkclements),
   <https://twitter.com/davidmarkclem>,
   <https://www.npmjs.com/~davidmarkclements>
-* [__dalisoft__](https://github.com/dalisoft), <https://twitter.com/dalisoft>,
+- [**dalisoft**](https://github.com/dalisoft), <https://twitter.com/dalisoft>,
   <https://www.npmjs.com/~dalisoft>
-* [__Dustin Deus__](https://github.com/StarpTech),
+- [**Dustin Deus**](https://github.com/StarpTech),
   <https://twitter.com/dustindeus>, <https://www.npmjs.com/~starptech>
-* [__Denis Fäcke__](https://github.com/SerayaEryn),
+- [**Denis Fäcke**](https://github.com/SerayaEryn),
   <https://twitter.com/serayaeryn>, <https://www.npmjs.com/~serayaeryn>
-* [__Rafael Gonzaga__](https://github.com/rafaelgss),
+- [**Rafael Gonzaga**](https://github.com/rafaelgss),
   <https://twitter.com/_rafaelgss>, <https://www.npmjs.com/~rafaelgss>
-* [__Trivikram Kamat__](https://github.com/trivikr),
+- [**Trivikram Kamat**](https://github.com/trivikr),
   <https://twitter.com/trivikram>, <https://www.npmjs.com/~trivikr>
-* [__Ayoub El Khattabi__](https://github.com/AyoubElk),
+- [**Ayoub El Khattabi**](https://github.com/AyoubElk),
   <https://twitter.com/ayoubelkh>, <https://www.npmjs.com/~ayoubelk>
-* [__Cemre Mengu__](https://github.com/cemremengu),
+- [**Cemre Mengu**](https://github.com/cemremengu),
   <https://twitter.com/cemremengu>, <https://www.npmjs.com/~cemremengu>
-* [__Salman Mitha__](https://github.com/salmanm),
+- [**Salman Mitha**](https://github.com/salmanm),
   <https://www.npmjs.com/~salmanm>
-* [__Nathan Woltman__](https://github.com/nwoltman),
+- [**Nathan Woltman**](https://github.com/nwoltman),
   <https://twitter.com/NathanWoltman>, <https://www.npmjs.com/~nwoltman>
 
 ## Hosted by
@@ -362,10 +366,12 @@ page where we accept and manage financial contributions.
 ## Acknowledgments
 
 This project is kindly sponsored by:
+
 - [NearForm](https://nearform.com)
 - [Platformatic](https://platformatic.dev)
 
 Past Sponsors:
+
 - [LetzDoIt](https://www.letzdoitapp.com/)
 
 This list includes all companies that support one or more team members
@@ -377,6 +383,7 @@ Licensed under [MIT](./LICENSE).
 
 For your convenience, here is a list of all the licenses of our production
 dependencies:
+
 - MIT
 - ISC
 - BSD-3-Clause

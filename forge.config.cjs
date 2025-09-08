@@ -3,7 +3,7 @@ const icon = path.resolve(__dirname, 'build/icon.ico')
 
 const config = {
   packagerConfig: {
-    asar: false ,
+    asar: false,
     appVersion: '7.7.7',
     executableName: 'HyperSend',
     prune: true,
@@ -35,7 +35,7 @@ const config = {
       /(.eslintrc.json)|(.gitignore)|(electron.vite.config.ts)|(forge.config.cjs)|(tsconfig.*)/
     ]
   },
-  outDir  : "A:/test_forge",
+  outDir: 'A:/test_forge',
   rebuildConfig: {},
   makers: [
     {

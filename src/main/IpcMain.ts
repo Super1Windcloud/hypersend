@@ -1,56 +1,45 @@
+import { devLog, getLocalWlanIPAddress } from '@/utils/index'
+import { ipcMain } from 'electron'
+import {
+  sendClipboardToClient,
+  sendFileToClient,
+  sendFolderToClient,
+  sendMessageToClient,
+  startClientServer,
+  stopClientServer
+} from './client'
 
-import { devLog, getLocalIPAddress, getLocalWlanIPAddress } from '@/utils/index'
-import {  ipcMain } from 'electron'
-import { sendClipboardToClient, sendFileToClient, sendFolderToClient, sendMessageToClient, startClientServer , stopClientServer  } from './client'
-
-
-
-export function startListeningRenderer()   {
-  ipcMain.handle('getLocalIPAddress', async () =>
-  {
-    return getLocalIPAddress()
-  })
-  ipcMain.handle('getLocalWlanIP', async () =>
-  {
-    return getLocalWlanIPAddress();
-  })
-
-
-  ipcMain.on('sendMessage' ,    (event : Electron.IpcMainEvent ,  message) =>
-  {
-     devLog("ipcmain sendMessage to  client ", message, "from event :" ,event.sender  )
-     sendMessageToClient(message)
+export function startListeningRenderer() {
+  ipcMain.handle('getLocalWlanIP', async () => {
+    return getLocalWlanIPAddress()
   })
 
-  ipcMain.handle('openFile', async () =>
-  {
-    devLog("ipcmain openFile to  client  port ")
-     sendFileToClient ( ) ;
+  ipcMain.on('sendMessage', (event: Electron.IpcMainEvent, message) => {
+    devLog('ipcmain sendMessage to  client ', message, 'from event :', event.sender)
+    sendMessageToClient(message)
   })
 
-  ipcMain.handle('openFolder', async () =>
-  {
-    devLog("ipcmain openFolder to  client  port ")
-    sendFolderToClient();
+  ipcMain.handle('openFile', async () => {
+    devLog('ipcmain openFile to  client  port ')
+    sendFileToClient()
   })
 
-  ipcMain.handle('sendClipboard', async () =>
-  {
-    devLog("ipcmain sendClipboard to  client  port ")
-     sendClipboardToClient ( ) ;
+  ipcMain.handle('openFolder', async () => {
+    devLog('ipcmain openFolder to  client  port ')
+    sendFolderToClient()
+  })
 
+  ipcMain.handle('sendClipboard', async () => {
+    devLog('ipcmain sendClipboard to  client  port ')
+    sendClipboardToClient()
   })
   // 服务端默认监听客户端33333 端口
-  ipcMain.on("startServerListener" ,  async ()=>{
-    devLog("ipcmain startServerListener  ")
-    await   startClientServer()
+  ipcMain.on('startServerListener', async () => {
+    devLog('ipcmain startServerListener  ')
+    await startClientServer()
   })
-  ipcMain.on("stopServerListener" ,  ()=>{
-    devLog("ipcmain stopServerListener  ");
-    stopClientServer();
-    }
-  )
-
-
-
+  ipcMain.on('stopServerListener', () => {
+    devLog('ipcmain stopServerListener  ')
+    stopClientServer()
+  })
 }

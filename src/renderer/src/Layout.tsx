@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react'
-import {  Layout } from 'antd'
+import { Layout } from 'antd'
 
-const { Header, Footer  } = Layout
+const { Header, Footer } = Layout
 
 const headerStyle: React.CSSProperties = {
   textAlign: 'center',
-  height: 'auto' ,
-  paddingInline: 'auto' ,
+  height: 'auto',
+  paddingInline: 'auto',
   lineHeight: '20px',
-  backgroundColor: 'transparent' ,
+  backgroundColor: 'transparent',
   borderBottom: '1px solid #d9d9d9'
 }
 
@@ -30,7 +30,7 @@ const App: React.FC = () => (
     <SelectTransferType />
     <ConnectToPeerNearbyDevices />
     <Footer style={{ backgroundColor: 'transparent' }}>
-      <p  className="tip" style={{ color: 'violet', backgroundColor: 'transparent' }}>
+      <p className="tip" style={{ color: 'violet', backgroundColor: 'transparent' }}>
         请确保传输目标设备处于同一局域网Wi-Fi内，然后访问监听设备IP加端口号进行连接。
       </p>
     </Footer>
