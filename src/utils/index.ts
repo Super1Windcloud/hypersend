@@ -24,7 +24,6 @@ export function devLog(...args: any[]) {
   }
 }
 
-
 export function getLocalWlanIPAddress(): string | string[] {
   const interfaces = os.networkInterfaces()
   const address: string[] = []
@@ -34,7 +33,7 @@ export function getLocalWlanIPAddress(): string | string[] {
 
   for (const name of Object.keys(interfaces)) {
     // 判断网卡名是否符合无线网卡的常见标识
-    if (wifiKeywords.some(keyword => name.toLowerCase().includes(keyword.toLowerCase()))) {
+    if (wifiKeywords.some((keyword) => name.toLowerCase().includes(keyword.toLowerCase()))) {
       for (const iface of interfaces[name] || []) {
         if (iface.family === 'IPv4' && !iface.internal) {
           address.push(iface.address)

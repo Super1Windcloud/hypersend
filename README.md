@@ -13,4 +13,3 @@
 >  `pnpm  win_dry`
 
 
-![alt text](image.png)
