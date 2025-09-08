@@ -1,9 +1,17 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-import OpenAI from 'openai'
+import { log } from 'console'
 import 'dotenv/config'
-import { stdout } from 'process'
+import OpenAI from 'openai'
 
-export async function SiliconflowServices(question?: string, onData?: (chunk: string) => void) {
+function envPrint() {
+  log(process.env.ZhiPu)
+  log(process.env.DeepSeek)
+  log(process.env.Siliconflow)
+  log(process.env.DouBao)
+  log(process.env.Kimi)
+  log(process.env.ALI_QWEN_QWQ)
+}
+
+async function SiliconflowServices(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.Siliconflow,
     baseURL: 'https://api.siliconflow.cn/v1',
@@ -49,7 +57,7 @@ export async function SiliconflowServices(question?: string, onData?: (chunk: st
   }
 }
 
-export async function DoubaoLiteServices(question?: string, onData?: (chunk: string) => void) {
+async function DoubaoLiteServices(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.DouBao,
     baseURL: 'https://ark.cn-beijing.volces.com/api/v3',
@@ -90,7 +98,7 @@ export async function DoubaoLiteServices(question?: string, onData?: (chunk: str
   }
 }
 
-export async function DoubaoServicesPro(question?: string, onData?: (chunk: string) => void) {
+async function DoubaoServicesPro(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.DouBao,
     baseURL: 'https://ark.cn-beijing.volces.com/api/v3/',
@@ -133,7 +141,7 @@ export async function DoubaoServicesPro(question?: string, onData?: (chunk: stri
   }
 }
 
-export async function DoubaoServicesDeepSeek(question?: string, onData?: (chunk: string) => void) {
+async function DoubaoServicesDeepSeek(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.DouBao,
     baseURL: 'https://ark.cn-beijing.volces.com/api/v3/',
@@ -177,7 +185,7 @@ export async function DoubaoServicesDeepSeek(question?: string, onData?: (chunk:
   }
 }
 
-export async function KimiServices(question?: string, onData?: (chunk: string) => void) {
+async function KimiServices(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.Kimi,
     baseURL: 'https://api.moonshot.cn/v1',
@@ -221,7 +229,7 @@ export async function KimiServices(question?: string, onData?: (chunk: string) =
   }
 }
 
-export async function ZhiPuServices(question?: string, onData?: (chunk: string) => void) {
+async function ZhiPuServices(question?: string, onData?: (chunk: string) => void) {
   const client = new OpenAI({
     apiKey: process.env.ZhiPu,
     baseURL: 'https://open.bigmodel.cn/api/paas/v4/',
@@ -267,7 +275,7 @@ export async function ZhiPuServices(question?: string, onData?: (chunk: string) 
   }
 }
 
-export async function DeepSeekApiServices(question?: string, onData?: (chunk: string) => void) {
+async function DeepSeekApiServices(question?: string, onData?: (chunk: string) => void) {
   const deepSeekApp = new OpenAI({
     baseURL: 'https://api.deepseek.com',
     apiKey: process.env.DeepSeek,
@@ -302,7 +310,7 @@ export async function DeepSeekApiServices(question?: string, onData?: (chunk: st
   }
 }
 
-export async function aliQwenQwQ32B(question?: string, onData?: (chunk: string) => void) {
+async function aliQwenQwQ32B(question?: string, onData?: (chunk: string) => void) {
   const ali = new OpenAI({
     apiKey: process.env.ALI_QWEN_QWQ,
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
@@ -352,7 +360,7 @@ export async function aliQwenQwQ32B(question?: string, onData?: (chunk: string) 
     return error
   }
 }
-export async function aliQwen2_5(question?: string, onData?: (chunk: string) => void) {
+async function aliQwen2_5(question?: string, onData?: (chunk: string) => void) {
   const qwen = new OpenAI({
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     apiKey: process.env.ALI_QWEN_QWQ,
@@ -380,7 +388,7 @@ export async function aliQwen2_5(question?: string, onData?: (chunk: string) => 
   }
   return result
 }
-export async function aliQwenPlus(question?: string, onData?: (chunk: string) => void) {
+async function aliQwenPlus(question?: string, onData?: (chunk: string) => void) {
   const ali = new OpenAI({
     apiKey: process.env.ALI_QWEN_QWQ,
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
@@ -431,7 +439,7 @@ export async function aliQwenPlus(question?: string, onData?: (chunk: string) =>
   }
 }
 
-export async function aliQwenMax(question?: string, onData?: (chunk: string) => void) {
+async function aliQwenMax(question?: string, onData?: (chunk: string) => void) {
   const qwen = new OpenAI({
     baseURL: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
     apiKey: process.env.ALI_QWEN_QWQ,
@@ -460,58 +468,76 @@ export async function aliQwenMax(question?: string, onData?: (chunk: string) => 
   return result
 }
 
-export async function FreeQwenServices(
-  question?: string,
-  onData?: (chunk: string) => void,
-  llms: Function[] = [aliQwen2_5, aliQwenPlus, aliQwenMax, aliQwenQwQ32B]
-) {
-  const randomNum = Math.floor(Math.random() * llms.length) //
-  if (randomNum < 0 || randomNum >= llms.length) return Error('randomNum 异常错误')
-  console.warn(randomNum)
-  try {
-    // 调用选中的 LLM
-    return await llms[randomNum](question, onData)
-  } catch (err: any) {
-    console.warn(`LLM ${randomNum} 返回错误: ${err.message}`)
-    // 移除返回错误的 LLM
-    const remainingLLMs = llms.filter((_, index) => index !== randomNum)
-    // 递归尝试剩余的 LLM
-    return FreeQwenServices(question, onData, remainingLLMs)
-  }
-}
-
-export async function RandomLLMServices(
-  question?: string,
-  onData?: (chunk: string) => void,
-  llms = [
-    aliQwenQwQ32B,
+async function testSpeedConcurrent(question: string) {
+  const services = {
     SiliconflowServices,
-    DeepSeekApiServices,
-    ZhiPuServices,
-    KimiServices,
+    DoubaoLiteServices,
     DoubaoServicesPro,
     DoubaoServicesDeepSeek,
-    DoubaoServicesPro
-  ]
-) {
-  // let llms = [aliQwenQwQ32B
-  //     , SiliconflowServices, DeepSeekApiServices
-  //     , ZhiPuServices, KimiServices, DoubaoServices
-  //     , DoubaoServicesDeepSeek, DoubaoServicesBackup];
-  const randomNum = Math.floor(Math.random() * llms.length) //
-  if (randomNum < 0 || randomNum >= llms.length) return Error('randomNum 异常错误')
-  console.warn(randomNum)
-  try {
-    return await llms[randomNum](question, onData)
-  } catch (err: any) {
-    console.warn(`LLM ${randomNum} 返回错误: ${err.message}`)
-    // 移除返回错误的 LLM
-    const remainingLLMs = llms.filter((_, index) => index !== randomNum)
-    // 递归尝试剩余的 LLM
-    return RandomLLMServices(question, onData, remainingLLMs)
+    KimiServices,
+    ZhiPuServices,
+    DeepSeekApiServices,
+    aliQwenQwQ32B,
+    aliQwen2_5,
+    aliQwenPlus,
+    aliQwenMax
   }
+
+  // 为每个服务创建一个 Promise，返回首条流式延迟
+  const promises = Object.entries(services).map(([name, service]) => {
+    return new Promise<{ name: string; delay: number }>((resolve) => {
+      const start = Date.now()
+      let firstChunkReceived = false
+      let resolvedOrTimedOut = false
+
+      service(question, () => {
+        if (!firstChunkReceived && !resolvedOrTimedOut) {
+          const end = Date.now()
+          const delay = end - start
+          console.log(`${name} 首条流式数据延迟: ${delay} ms`)
+          firstChunkReceived = true
+          resolvedOrTimedOut = true
+          resolve({ name, delay })
+        }
+      }).catch((err) => {
+        if (!resolvedOrTimedOut) {
+          console.log(`${name} 调用失败:`, err)
+          resolvedOrTimedOut = true
+          resolve({ name, delay: Infinity }) // 失败视为无效
+        }
+      })
+    })
+  })
+
+  // 等待所有首条返回完成
+  const allResults = await Promise.all(promises)
+
+  // 过滤掉失败或超时的
+  const validResults = allResults.filter((r) => r.delay !== Infinity)
+  if (validResults.length === 0) {
+    console.log('所有服务首条返回失败或超时')
+    return
+  }
+
+  // 找出首条流式返回最快的服务
+  const fastest = validResults.reduce((prev, curr) => (curr.delay < prev.delay ? curr : prev))
+  console.log(`首条流式返回最快的服务是: ${fastest.name}，延迟: ${fastest.delay} ms`)
 }
 
-// FreeQwenServices('牛顿迭代', (chunk) => {
-//   stdout.write(chunk)
-// })
+// testSpeedConcurrent('牛顿迭代')
+
+/**
+ * SiliconflowServices 首条流式数据延迟: 1233 ms
+aliQwen2_5 首条流式数据延迟: 3520 ms
+aliQwenQwQ32B 首条流式数据延迟: 3522 ms
+aliQwenPlus 首条流式数据延迟: 3547 ms
+aliQwenMax 首条流式数据延迟: 3576 ms
+DoubaoServicesDeepSeek 首条流式数据延迟: 3583 ms
+DoubaoLiteServices 首条流式数据延迟: 3644 ms
+KimiServices 首条流式数据延迟: 3832 ms
+DoubaoServicesPro 首条流式数据延迟: 4255 ms
+ZhiPuServices 首条流式数据延迟: 4340 ms
+DeepSeekApiServices 首条流式数据延迟: 6021 ms
+首条流式返回最快的服务是: SiliconflowServices，延迟: 1233 ms
+
+ */

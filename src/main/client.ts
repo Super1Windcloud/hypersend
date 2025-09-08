@@ -16,7 +16,6 @@ let app: FastifyInstance | null | undefined = null
 const wsClients: Set<WebSocket> = new Set() // 存储 WebSocket 客户端
 import dotenv from 'dotenv'
 import { createWriteStream } from 'fs'
-import { envPrint } from '@/utils/api'
 const __public = path.join(process.cwd(), 'public')
 console.log('public:', __public)
 function initEnv() {
@@ -43,7 +42,10 @@ async function createFastifyApp() {
 
     writeLog('\n' + 'rootPath:' + rootPath)
   }
-  app = fastify({ logger: true }).withTypeProvider<TypeBoxTypeProvider>() // 注册 fastify-typebox 插件
+  app = fastify({
+    logger: true,
+    bodyLimit: 50 * 1024 * 1024
+  }).withTypeProvider<TypeBoxTypeProvider>() // 注册 fastify-typebox 插件
   app.register(fastifyStatic, {
     root: rootPath,
     prefix: '/'
@@ -112,6 +114,7 @@ async function createFastifyApp() {
       // let buffer  :Buffer  =   base64ToBuffer(url);
       let buffer: Buffer = await blobUrlToBuffer(url)
       let ocrStr = await getPaddleOcrResult(buffer)
+      devLog(ocrStr)
       await reply.send(ocrStr)
     } catch (err) {
       console.error(err)
@@ -137,7 +140,6 @@ async function createFastifyApp() {
 }
 
 export async function startClientServer() {
-  envPrint()
   app = app ?? (await createFastifyApp())
   await checkAndKillPort(33333)
   // 启动服务器并监听 33333 端口

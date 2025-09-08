@@ -34,26 +34,25 @@ type PaddleOcrResultType = {
 }
 
 export async function getPaddleOcrResult(img?: loadImgType): Promise<string | void> {
-  /**
-   * defaultDetectionPath   ch_PP-OCRv4_det_infer.onnx',
-   * defaultRecognitionPath:   ch_PP-OCRv4_rec_infer.onnx',
-   *  dictionaryPath  :  'ppocr_keys_v1.txt',
-   */
-  let det, rec, key
+  let det: string
+  let rec: string
+  let key: string
+
   if (process.env.NODE_ENV === 'development') {
-    det = process.cwd() + '\\esearch\\ppocr_det.onnx'
-    rec = process.cwd() + '\\esearch\\ppocr_rec.onnx'
-    key = process.cwd() + '\\esearch\\ppocr_keys_v1.txt'
+    // 开发模式，模型直接放在项目根目录下的 esearch 目录
+    det = path.join(process.cwd(), 'esearch', 'ppocr_det.onnx')
+    rec = path.join(process.cwd(), 'esearch', 'ppocr_rec.onnx')
+    key = path.join(process.cwd(), 'esearch', 'ppocr_keys_v1.txt')
   } else {
+    // 生产环境，模型在 app.asar.unpacked 下
     det = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_det.onnx')
     rec = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_rec.onnx')
     key = path.join(process.cwd(), 'resources', 'app.asar.unpacked', 'esearch', 'ppocr_keys_v1.txt')
-    det = process.cwd() + '\\esearch\\ppocr_det.onnx'
-    rec = process.cwd() + '\\esearch\\ppocr_rec.onnx'
-    key = process.cwd() + '\\esearch\\ppocr_keys_v1.txt'
   }
+
   let ocr
-  writeLog('模型路径\n' + det + '\n' + rec + '\n' + key + '\n')
+  writeLog(`模型路径:\n${det}\n${rec}\n${key}\n`)
+
   try {
     ocr = await Ocr.create({
       models: {
@@ -66,11 +65,12 @@ export async function getPaddleOcrResult(img?: loadImgType): Promise<string | vo
     })
   } catch (error) {
     console.error('Error in getPaddleOcrResult:', error)
-    throw error + '\n 模型路径' + det // 重新抛出错误，以便调用者处理
+    throw new Error(`模型加载失败：${error}\n模型路径: ${det}`)
   }
-  const result: PaddleOcrResultType[] = await ocr.detect(img)
 
-  let text = result.map(({ text }: PaddleOcrResultType) => text).join('\n')
+  const result: PaddleOcrResultType[] = await ocr.detect(img)
+  const text = result.map(({ text }: PaddleOcrResultType) => text).join('\n')
+
   devLog(text)
   return text
 }
@@ -91,19 +91,4 @@ export function base64ToBuffer(base64: string): Buffer {
   }
 
   return Buffer.from(base64, 'base64')
-}
-
-//@ts-ignore
-async function testPaddleOcr() {
-  let path = process.cwd() + '\\img\\leecode.png'
-
-  let toBlobUrl = ((buffer: Buffer) => {
-    const blob = new Blob([buffer], { type: 'image/png' })
-    return URL.createObjectURL(blob)
-  }) as (buffer: Buffer) => string
-
-  let buffer = (await imagePathToloadImgType(path)) as Buffer
-
-  let url = toBlobUrl(buffer)
-  getPaddleOcrResult(await blobUrlToBuffer(url))
 }

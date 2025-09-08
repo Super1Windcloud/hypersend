@@ -1,4 +1,4 @@
-import { writeLog } from '@/utils'
+import { devLog, writeLog } from '@/utils'
 import ocr_api20210707, * as $ocr_api20210707 from '@alicloud/ocr-api20210707'
 import * as $OpenApi from '@alicloud/openapi-client'
 import * as $Util from '@alicloud/tea-util'
@@ -71,6 +71,7 @@ export function createAppLLMServices(app: FastifyInstance) {
     try {
       writeLog('请求LLM接口')
       let result = await aliQwenPlus(question, (chunk: string) => {
+        devLog(chunk)
         reply.raw.write(chunk) // 是用于将数据块逐步写入服务器响应流的方法
         process.stdout.write(chunk)
       })
@@ -78,7 +79,6 @@ export function createAppLLMServices(app: FastifyInstance) {
         reply.raw.write('Error: Something went wrong\n')
         writeLog('请求LLM接口失败 :' + result.message)
       }
-
       reply.raw.end()
     } catch (error) {
       console.error('Error:', error)
